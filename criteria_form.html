@@ -695,11 +695,14 @@ function buildPerfRefineList() {
 }
 
 /* ── Submit ── */
-function submitForm() {
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyufq2Dvl888nAFK_RAye_iG8kvFs58Br3ULMB-9UPdBW0ZaLcFfgrW3YcrcFfppw0/exec';
+
+async function submitForm() {
   flagged.forEach((c, i) => {
     const ta = document.getElementById('perf_ta_' + i);
     if (ta) c.perfRefinement = ta.value.trim();
   });
+
   const sub = {
     timestamp:     new Date().toISOString(),
     name:          document.getElementById('partName').value.trim(),
@@ -709,19 +712,41 @@ function submitForm() {
     totalSelected: selected.length,
     totalFlagged:  flagged.length,
     rankings: selected.map((c, i) => ({
-      rank:               i + 1,
-      criteria:           c.name,
-      category:           c.cat,
-      currentDefinition:  c.desc,
+      rank:                  i + 1,
+      criteria:              c.name,
+      category:              c.cat,
+      currentDefinition:     c.desc,
       proposedDefRefinement: c.proposedDef || '',
-      perfFlagged:        c.perfFlagged || false,
-      perfRefinement:     c.perfRefinement || ''
+      perfFlagged:           c.perfFlagged || false,
+      currentPerfLevels:     (c.perfLevels || []).map(l => l.num + '— ' + l.text).join(' | '),
+      perfRefinement:        c.perfRefinement || ''
     }))
   };
+
   window._lastSubmission = sub;
+
+  // Show loading state
+  const submitBtn = document.querySelector('#step5 .btn-primary');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting...'; }
+
+  let backendOk = false;
+  try {
+    if (BACKEND_URL && BACKEND_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+      const res = await fetch(BACKEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sub),
+        mode: 'no-cors' // Apps Script requires no-cors
+      });
+      backendOk = true;
+    }
+  } catch (err) {
+    console.warn('Backend submission failed:', err);
+  }
+
   showStep('stepDone'); setProgress(6);
   document.getElementById('successMsg').textContent =
-    `Thank you, ${sub.name}. Your ${sub.totalSelected} ranked criteria, definition feedback, and ${sub.totalFlagged} performance level refinement${sub.totalFlagged !== 1 ? 's' : ''} have been recorded. Please send your results to the facilitator.`;
+    `Thank you, ${sub.name}. Your ${sub.totalSelected} ranked criteria, definition feedback, and ${sub.totalFlagged} performance level refinement${sub.totalFlagged !== 1 ? 's' : ''} have been recorded${backendOk ? ' and saved to the database' : ''}.`;
   renderSummaryPreview(sub);
 }
 

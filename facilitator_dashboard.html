@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Facilitator Dashboard — Criteria Prioritisation</title>
+<title>Facilitator Dashboard — Pharmaceutical Criteria Prioritisation</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -14,431 +14,490 @@
     --green-bg: #eaf3de; --green-text: #27500a;
     --amber-bg: #faeeda; --amber-text: #633806;
     --purple-bg: #eeedfe; --purple-text: #3c3489;
-    --coral-bg: #faece7; --coral-text: #712b13;
+    --red-bg: #fcebeb; --red-text: #a32d2d;
     --radius: 8px; --radius-lg: 12px;
   }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg2); color: var(--text); font-size: 14px; line-height: 1.6; }
-  .page { max-width: 960px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
-  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 10px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg2); color: var(--text); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  .page { max-width: 1000px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  /* Header */
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px; }
   .header h1 { font-size: 22px; font-weight: 500; margin-bottom: 3px; }
   .header p { font-size: 13px; color: var(--text2); }
+  .header-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  /* Config banner */
+  .config-banner { background: var(--amber-bg); border: 0.5px solid rgba(186,117,23,.3); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: flex-start; gap: 12px; }
+  .config-banner.hidden { display: none; }
+  .config-banner-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+  .config-banner p { font-size: 13px; color: var(--amber-text); line-height: 1.6; }
+  .config-banner code { background: rgba(0,0,0,0.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; font-family: monospace; }
+
+  /* Cards */
   .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; }
   .card-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.25rem; }
-  .stat-card { background: var(--bg2); border-radius: var(--radius); padding: 12px 14px; }
-  .stat-val { font-size: 28px; font-weight: 500; line-height: 1.1; }
-  .stat-lbl { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .stat-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+  .stat-val { font-size: 26px; font-weight: 500; line-height: 1.1; margin-bottom: 3px; }
+  .stat-lbl { font-size: 12px; color: var(--text2); line-height: 1.3; }
+
+  /* Tabs */
+  .tab-bar { display: flex; gap: 4px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .tab { padding: 7px 16px; font-size: 13px; font-weight: 500; border: 0.5px solid var(--border); border-radius: var(--radius); cursor: pointer; background: transparent; color: var(--text2); font-family: inherit; transition: all .15s; }
+  .tab:hover { background: var(--bg3); }
+  .tab.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Buttons */
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 13px; font-family: inherit; font-weight: 500; border: 0.5px solid var(--border2); border-radius: var(--radius); background: transparent; color: var(--text); cursor: pointer; transition: background .15s; }
   .btn:hover { background: var(--bg3); }
   .btn:active { transform: scale(0.98); }
   .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
   .btn-primary:hover { opacity: .85; background: var(--text); }
-  .btn-danger { border-color: #e24b4a; color: #a32d2d; }
-  .btn-danger:hover { background: #fcebeb; }
-  .tab-bar { display: flex; gap: 4px; margin-bottom: 1.25rem; }
-  .tab { padding: 7px 16px; font-size: 13px; font-weight: 500; border: 0.5px solid var(--border); border-radius: var(--radius); cursor: pointer; background: transparent; color: var(--text2); font-family: inherit; }
-  .tab.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-  .rank-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-  .rank-bar-label { font-size: 12px; width: 260px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
-  .rank-bar-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
-  .rank-bar-fill { height: 100%; border-radius: 4px; background: var(--text); transition: width .4s; }
-  .rank-bar-val { font-size: 12px; color: var(--text2); min-width: 36px; text-align: right; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+  /* Category badges */
   .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--radius); white-space: nowrap; }
-  .badge-product { background: var(--blue-bg); color: var(--blue-text); }
-  .badge-manufacturer { background: var(--green-bg); color: var(--green-text); }
-  .badge-service { background: var(--purple-bg); color: var(--purple-text); }
-  .badge-economic { background: var(--amber-bg); color: var(--amber-text); }
+  .cat-Product      { background: var(--blue-bg);   color: var(--blue-text); }
+  .cat-Manufacturer { background: var(--green-bg);  color: var(--green-text); }
+  .cat-Service      { background: var(--purple-bg); color: var(--purple-text); }
+  .cat-Economic     { background: var(--amber-bg);  color: var(--amber-text); }
+  .agr-high { background: var(--green-bg); color: var(--green-text); }
+  .agr-med  { background: var(--amber-bg); color: var(--amber-text); }
+  .agr-low  { background: var(--red-bg);   color: var(--red-text); }
+
+  /* Bar chart rows */
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .bar-label { font-size: 12px; width: 240px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar-track { flex: 1; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; background: var(--text); transition: width .5s; }
+  .bar-val { font-size: 12px; color: var(--text2); min-width: 40px; text-align: right; }
+
+  /* Tables */
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   thead th { font-size: 11px; font-weight: 500; color: var(--text2); text-align: left; padding: 6px 10px; border-bottom: 0.5px solid var(--border); background: var(--bg2); }
-  tbody td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; }
+  tbody td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); vertical-align: top; line-height: 1.5; }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover { background: var(--bg2); }
-  .participant-card { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px; margin-bottom: 8px; }
-  .participant-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+
+  /* Participant cards */
+  .participant-card { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; }
   .participant-name { font-weight: 500; font-size: 14px; }
   .participant-meta { font-size: 12px; color: var(--text2); margin-top: 1px; }
-  .mini-ranking { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-  .mini-rank-item { font-size: 11px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 3px 8px; display: flex; align-items: center; gap: 4px; }
-  .mini-rank-num { font-weight: 500; color: var(--text3); }
-  .upload-zone { border: 1.5px dashed var(--border2); border-radius: var(--radius-lg); padding: 2rem; text-align: center; cursor: pointer; transition: background .15s; }
-  .upload-zone:hover { background: var(--bg3); }
-  .upload-zone p { font-size: 14px; color: var(--text2); margin-bottom: 8px; }
-  .upload-zone small { font-size: 12px; color: var(--text3); }
-  .hidden { display: none; }
+  .mini-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .mini-tag { font-size: 11px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 2px 8px; }
+
+  /* Refinement cards */
+  .refine-item { border: 0.5px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+  .refine-header { background: var(--bg2); padding: 8px 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .refine-name { font-size: 13px; font-weight: 500; }
+  .refine-body { padding: 10px 12px; }
+  .refine-proposal { background: var(--amber-bg); border-radius: var(--radius); padding: 8px 10px; margin-bottom: 6px; font-size: 13px; color: var(--amber-text); line-height: 1.6; }
+  .refine-proposal.purple { background: var(--purple-bg); color: var(--purple-text); }
+  .refine-by { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  /* Loading / empty states */
+  .loading-state { text-align: center; padding: 3rem; color: var(--text2); }
+  .loading-spinner { width: 28px; height: 28px; border: 2px solid var(--border2); border-top-color: var(--text); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .empty-state { text-align: center; padding: 2.5rem; color: var(--text2); font-size: 13px; }
-  .divergence-high { color: #a32d2d; font-weight: 500; }
-  .divergence-med { color: #854f0b; }
-  .agreement-badge { display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: var(--radius); }
-  .agr-high { background: var(--green-bg); color: var(--green-text); }
-  .agr-med { background: var(--amber-bg); color: var(--amber-text); }
-  .agr-low { background: #fcebeb; color: #a32d2d; }
-  .section-divider { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; margin: 1.25rem 0 .75rem; }
-  @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .rank-bar-label { width: 140px; } }
+  .last-updated { font-size: 11px; color: var(--text3); margin-left: auto; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #639922; display: inline-block; margin-right: 4px; }
+  .status-dot.offline { background: #e24b4a; }
+
+  /* URL config input */
+  .url-input-wrap { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .url-input-wrap input { flex: 1; padding: 7px 10px; font-size: 13px; font-family: monospace; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; }
+  .url-input-wrap input:focus { border-color: #555; }
+
+  @media (max-width: 700px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .bar-label { width: 130px; }
+  }
 </style>
 </head>
 <body>
 <div class="page">
+
   <div class="header">
     <div>
       <h1>Facilitator dashboard</h1>
       <p>Pharmaceutical Criteria Prioritisation — Focus Group Results</p>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <label class="btn" for="csvUpload">Import CSV files</label>
-      <input type="file" id="csvUpload" accept=".csv" multiple style="display:none" onchange="importCSVs(event)" />
-      <button class="btn btn-primary" onclick="exportFullCSV()">Export all data</button>
-      <button class="btn btn-danger" onclick="clearAll()">Clear all</button>
+    <div class="header-actions">
+      <span id="connStatus" style="font-size:12px;color:var(--text2);display:flex;align-items:center">
+        <span class="status-dot offline" id="statusDot"></span><span id="statusText">Not connected</span>
+      </span>
+      <button class="btn" onclick="loadData()" id="refreshBtn">Refresh</button>
+      <button class="btn btn-primary" onclick="exportCSV()">Export CSV</button>
+    </div>
+  </div>
+
+  <!-- Config banner — shown until URL is set -->
+  <div class="config-banner" id="configBanner">
+    <div class="config-banner-icon">&#9432;</div>
+    <div>
+      <p style="font-weight:500;margin-bottom:4px">Enter your Apps Script URL to connect to the database</p>
+      <p>After deploying your Google Apps Script, paste the Web App URL below. It will be saved in your browser.</p>
+      <div class="url-input-wrap">
+        <input type="text" id="urlInput" placeholder="https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec" />
+        <button class="btn btn-primary" onclick="saveUrl()">Connect</button>
+      </div>
     </div>
   </div>
 
   <!-- Stats -->
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-val" id="statParticipants">0</div><div class="stat-lbl">Participants</div></div>
-    <div class="stat-card"><div class="stat-val" id="statCriteria">0</div><div class="stat-lbl">Unique criteria selected</div></div>
-    <div class="stat-card"><div class="stat-val" id="statAvgSelected">—</div><div class="stat-lbl">Avg criteria per person</div></div>
-    <div class="stat-card"><div class="stat-val" id="statTopCriteria">—</div><div class="stat-lbl">Top ranked criteria</div></div>
+    <div class="stat-card"><div class="stat-val" id="statParticipants">—</div><div class="stat-lbl">Participants</div></div>
+    <div class="stat-card"><div class="stat-val" id="statCriteria">—</div><div class="stat-lbl">Unique criteria selected</div></div>
+    <div class="stat-card"><div class="stat-val" id="statAvg">—</div><div class="stat-lbl">Avg criteria per person</div></div>
+    <div class="stat-card"><div class="stat-val" id="statDef">—</div><div class="stat-lbl">Definition refinements</div></div>
+    <div class="stat-card"><div class="stat-val" id="statPerf">—</div><div class="stat-lbl">Performance refinements</div></div>
   </div>
 
-  <!-- Import prompt if empty -->
-  <div id="emptyState">
-    <div class="upload-zone" onclick="document.getElementById('csvUpload').click()">
-      <p>No submissions yet</p>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:8px">Import CSV files exported from the participant form, or paste data manually below.</p>
-      <small>Accepts multiple CSV files at once</small>
-    </div>
-    <div class="card" style="margin-top:1.25rem">
-      <div class="card-title">Paste CSV data manually</div>
-      <textarea id="pasteArea" rows="6" style="width:100%;font-size:12px;font-family:monospace;border:0.5px solid var(--border2);border-radius:var(--radius);padding:8px;resize:vertical;background:var(--bg);color:var(--text)" placeholder="Paste CSV content here (one or multiple submissions)..."></textarea>
-      <div style="margin-top:8px;display:flex;justify-content:flex-end">
-        <button class="btn btn-primary" onclick="parsePasted()">Import pasted data</button>
-      </div>
-    </div>
+  <!-- Last updated -->
+  <div style="display:flex;align-items:center;margin-bottom:1rem;font-size:12px;color:var(--text3)">
+    <span id="lastUpdated"></span>
+    <span class="last-updated" id="autoRefreshNote"></span>
   </div>
 
-  <!-- Dashboard (shown when data exists) -->
-  <div id="dashContent" class="hidden">
-    <div class="tab-bar">
-      <button class="tab active" onclick="switchTab('consensus')">Group consensus</button>
-      <button class="tab" onclick="switchTab('participants')">Participants</button>
-      <button class="tab" onclick="switchTab('category')">By category</button>
-      <button class="tab" onclick="switchTab('divergence')">Divergence</button>
-    </div>
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('consensus')">Group consensus</button>
+    <button class="tab" onclick="switchTab('participants')">Participants</button>
+    <button class="tab" onclick="switchTab('category')">By category</button>
+    <button class="tab" onclick="switchTab('definitions')">Definition refinements</button>
+    <button class="tab" onclick="switchTab('performance')">Performance refinements</button>
+    <button class="tab" onclick="switchTab('divergence')">Divergence</button>
+  </div>
 
-    <!-- Consensus Tab -->
-    <div id="tab-consensus" class="tab-panel active">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
-          <div class="card-title" style="margin-bottom:0">Overall group ranking (weighted by rank position)</div>
-          <div style="font-size:12px;color:var(--text2)">Lower weighted score = higher importance</div>
-        </div>
-        <div id="consensusChart"></div>
+  <!-- TAB: Consensus -->
+  <div id="tab-consensus" class="tab-panel active">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+        <div class="card-title" style="margin-bottom:0">Overall group ranking — weighted by rank position &amp; selection rate</div>
+        <span style="font-size:12px;color:var(--text2)">Lower score = higher importance</span>
       </div>
-      <div class="card">
-        <div class="card-title">Top 10 consensus criteria</div>
-        <table>
-          <thead><tr><th>#</th><th>Criteria</th><th>Category</th><th>Selected by</th><th>Weighted score</th><th>Agreement</th></tr></thead>
-          <tbody id="consensusTable"></tbody>
-        </table>
-      </div>
+      <div id="consensusChart"><div class="loading-state"><div class="loading-spinner"></div><p>Loading data...</p></div></div>
     </div>
-
-    <!-- Participants Tab -->
-    <div id="tab-participants" class="tab-panel">
-      <div class="card">
-        <div class="card-title">All participant submissions</div>
-        <div id="participantList"></div>
-      </div>
-      <div class="card" style="margin-top:0">
-        <div class="card-title">Submission log</div>
-        <table>
-          <thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Experience</th><th>Criteria selected</th><th>Submitted</th></tr></thead>
-          <tbody id="submissionLog"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Category Tab -->
-    <div id="tab-category" class="tab-panel">
-      <div class="card">
-        <div class="card-title">Importance by category</div>
-        <div id="categoryChart"></div>
-      </div>
-    </div>
-
-    <!-- Divergence Tab -->
-    <div id="tab-divergence" class="tab-panel">
-      <div class="card">
-        <div class="card-title">Areas of disagreement</div>
-        <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Criteria where participants' rankings varied most — high standard deviation indicates low consensus.</p>
-        <div id="divergenceList"></div>
-      </div>
+    <div class="card">
+      <div class="card-title">Top 10 consensus criteria</div>
+      <table><thead><tr><th>#</th><th>Criteria</th><th>Category</th><th>Selected by</th><th>Mean rank</th><th>Weighted score</th><th>Agreement</th></tr></thead>
+      <tbody id="consensusTable"><tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem">Waiting for data...</td></tr></tbody></table>
     </div>
   </div>
 
-  <!-- Add more CSV after data loaded -->
-  <div id="addMoreBtn" class="hidden" style="margin-top:.5rem;display:flex;gap:8px">
-    <label class="btn" for="csvUpload2">+ Add more CSV files</label>
-    <input type="file" id="csvUpload2" accept=".csv" multiple style="display:none" onchange="importCSVs(event)" />
-    <button class="btn" onclick="document.getElementById('pasteArea2').classList.toggle('hidden')">+ Paste CSV data</button>
+  <!-- TAB: Participants -->
+  <div id="tab-participants" class="tab-panel">
+    <div class="card">
+      <div class="card-title">All participant submissions</div>
+      <div id="participantCards"><div class="empty-state">No submissions yet.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Submission log</div>
+      <table><thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Experience</th><th>Criteria selected</th><th>Perf. flagged</th><th>Submitted</th></tr></thead>
+      <tbody id="submissionLog"><tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem">No submissions yet.</td></tr></tbody></table>
+    </div>
   </div>
-  <div id="pasteArea2Wrap" class="hidden card" style="margin-top:.75rem">
-    <textarea id="pasteArea2" rows="5" style="width:100%;font-size:12px;font-family:monospace;border:0.5px solid var(--border2);border-radius:var(--radius);padding:8px;resize:vertical;background:var(--bg);color:var(--text)" placeholder="Paste more CSV data here..."></textarea>
-    <div style="margin-top:8px;display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="parsePasted2()">Import</button></div>
+
+  <!-- TAB: By category -->
+  <div id="tab-category" class="tab-panel">
+    <div class="card">
+      <div class="card-title">Importance score by category</div>
+      <div id="categoryChart"><div class="empty-state">No data yet.</div></div>
+    </div>
   </div>
+
+  <!-- TAB: Definition refinements -->
+  <div id="tab-definitions" class="tab-panel">
+    <div class="card">
+      <div class="card-title">Proposed definition refinements</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">All participant suggestions for improving criterion definitions, grouped by criterion.</p>
+      <div id="defRefinements"><div class="empty-state">No refinements proposed yet.</div></div>
+    </div>
+  </div>
+
+  <!-- TAB: Performance refinements -->
+  <div id="tab-performance" class="tab-panel">
+    <div class="card">
+      <div class="card-title">Proposed performance level refinements</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">All participant suggestions for improving performance level descriptions, grouped by criterion.</p>
+      <div id="perfRefinements"><div class="empty-state">No refinements proposed yet.</div></div>
+    </div>
+  </div>
+
+  <!-- TAB: Divergence -->
+  <div id="tab-divergence" class="tab-panel">
+    <div class="card">
+      <div class="card-title">Areas of disagreement</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Criteria with the highest standard deviation in ranking — indicating low consensus among participants.</p>
+      <div id="divergenceChart"><div class="empty-state">No data yet.</div></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-let submissions = [];
+const STORAGE_KEY = 'pharma_backend_url';
+const PRESET_URL  = 'https://script.google.com/macros/s/AKfycbyufq2Dvl888nAFK_RAye_iG8kvFs58Br3ULMB-9UPdBW0ZaLcFfgrW3YcrcFfppw0/exec';
+let BACKEND_URL = localStorage.getItem(STORAGE_KEY) || PRESET_URL;
+let summaryData = null;
+let autoRefreshTimer = null;
 
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['consensus','participants','category','divergence'][i]===name));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-}
-
-function parseCSVText(text) {
-  const lines = text.trim().split('\n').filter(l => l.trim());
-  if (lines.length < 2) return [];
-  const header = parseCSVLine(lines[0]);
-  const parsed = [];
-  const byKey = {};
-  lines.slice(1).forEach(line => {
-    const cols = parseCSVLine(line);
-    if (cols.length < 8) return;
-    const key = cols[0] + '|' + cols[1];
-    if (!byKey[key]) {
-      byKey[key] = { timestamp: cols[0], name: cols[1], role: cols[2], department: cols[3], experience: cols[4], rankings: [] };
-      parsed.push(byKey[key]);
-    }
-    byKey[key].rankings.push({ rank: parseInt(cols[5]) || 0, criteria: cols[6], category: cols[7] });
-  });
-  parsed.forEach(s => { s.rankings.sort((a,b)=>a.rank-b.rank); s.totalSelected = s.rankings.length; });
-  return parsed;
-}
-
-function parseCSVLine(line) {
-  const result = []; let cur = ''; let inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    if (line[i] === '"') { inQ = !inQ; }
-    else if (line[i] === ',' && !inQ) { result.push(cur); cur = ''; }
-    else { cur += line[i]; }
+/* ── URL config ── */
+function saveUrl() {
+  const val = document.getElementById('urlInput').value.trim();
+  if (!val.startsWith('https://script.google.com')) {
+    alert('Please enter a valid Google Apps Script URL starting with https://script.google.com');
+    return;
   }
-  result.push(cur);
-  return result.map(s => s.trim());
+  BACKEND_URL = val;
+  localStorage.setItem(STORAGE_KEY, val);
+  document.getElementById('configBanner').classList.add('hidden');
+  loadData();
 }
 
-function importCSVs(e) {
-  const files = Array.from(e.target.files);
-  let pending = files.length;
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const parsed = parseCSVText(ev.target.result);
-      parsed.forEach(s => { if (!submissions.find(x => x.timestamp===s.timestamp && x.name===s.name)) submissions.push(s); });
-      pending--;
-      if (pending === 0) render();
-    };
-    reader.readAsText(file);
-  });
+function init() {
+  localStorage.setItem(STORAGE_KEY, BACKEND_URL);
+  document.getElementById('configBanner').classList.add('hidden');
+  document.getElementById('urlInput').value = BACKEND_URL;
+  loadData();
+  startAutoRefresh();
 }
 
-function parsePasted() {
-  const text = document.getElementById('pasteArea').value;
-  if (!text.trim()) return;
-  const parsed = parseCSVText(text);
-  parsed.forEach(s => { if (!submissions.find(x => x.timestamp===s.timestamp && x.name===s.name)) submissions.push(s); });
-  render();
+/* ── Data fetching ── */
+async function loadData() {
+  if (!BACKEND_URL) return;
+  setStatus('loading');
+  document.getElementById('refreshBtn').textContent = 'Refreshing...';
+  try {
+    const res  = await fetch(BACKEND_URL + '?action=summary', { cache: 'no-store' });
+    const data = await res.json();
+    summaryData = data;
+    render(data);
+    setStatus('online');
+    document.getElementById('lastUpdated').textContent =
+      'Last updated: ' + new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  } catch (err) {
+    setStatus('offline');
+    console.error('Fetch error:', err);
+  }
+  document.getElementById('refreshBtn').textContent = 'Refresh';
 }
 
-function parsePasted2() {
-  const text = document.getElementById('pasteArea2').value;
-  if (!text.trim()) return;
-  const parsed = parseCSVText(text);
-  parsed.forEach(s => { if (!submissions.find(x => x.timestamp===s.timestamp && x.name===s.name)) submissions.push(s); });
-  render();
+function startAutoRefresh() {
+  clearInterval(autoRefreshTimer);
+  autoRefreshTimer = setInterval(loadData, 60000); // every 60 seconds
+  document.getElementById('autoRefreshNote').textContent = 'Auto-refreshes every 60s';
 }
 
-function computeConsensus() {
-  const scores = {};
-  const counts = {};
-  const rankArrays = {};
-  const n = submissions.length;
-  submissions.forEach(sub => {
-    sub.rankings.forEach(r => {
-      const k = r.criteria;
-      if (!scores[k]) { scores[k] = 0; counts[k] = 0; rankArrays[k] = []; }
-      scores[k] += r.rank;
-      counts[k]++;
-      rankArrays[k].push(r.rank);
-    });
-  });
-  return Object.keys(scores).map(k => {
-    const arr = rankArrays[k];
-    const mean = scores[k] / arr.length;
-    const variance = arr.reduce((a,b) => a + (b-mean)**2, 0) / arr.length;
-    const std = Math.sqrt(variance);
-    const selectionRate = counts[k] / n;
-    const weightedScore = (mean * 0.7) + ((1 - selectionRate) * 10 * 0.3);
-    const cat = submissions.flatMap(s=>s.rankings).find(r=>r.criteria===k)?.category || '';
-    return { criteria: k, category: cat, totalScore: scores[k], count: counts[k], mean, std, selectionRate, weightedScore };
-  }).sort((a,b) => a.weightedScore - b.weightedScore);
+function setStatus(state) {
+  const dot  = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  if (state === 'online')  { dot.className = 'status-dot';         text.textContent = 'Connected'; }
+  if (state === 'offline') { dot.className = 'status-dot offline'; text.textContent = 'Connection failed'; }
+  if (state === 'loading') { dot.className = 'status-dot offline'; text.textContent = 'Loading...'; }
 }
 
-function catBadge(cat) {
-  const map = { Product:'product', Manufacturer:'manufacturer', Service:'service', Economic:'economic' };
-  return `<span class="badge badge-${map[cat]||'product'}">${cat}</span>`;
+/* ── Tab switching ── */
+function switchTab(name) {
+  const tabs = ['consensus','participants','category','definitions','performance','divergence'];
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', tabs[i] === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
 }
 
-function agreementLabel(std) {
-  if (std < 2) return '<span class="agreement-badge agr-high">High</span>';
-  if (std < 4) return '<span class="agreement-badge agr-med">Moderate</span>';
-  return '<span class="agreement-badge agr-low">Low</span>';
+/* ── Render all views ── */
+function render(data) {
+  const m = data.meta || {};
+  document.getElementById('statParticipants').textContent = m.totalParticipants || 0;
+  document.getElementById('statCriteria').textContent     = m.totalCriteriaSelected || 0;
+  document.getElementById('statAvg').textContent          = m.avgCriteriaPerPerson || '—';
+  document.getElementById('statDef').textContent          = m.totalDefRefinements || 0;
+  document.getElementById('statPerf').textContent         = m.totalPerfRefinements || 0;
+
+  renderConsensus(data.consensusRankings || []);
+  renderParticipants(data.participants || []);
+  renderCategory(data.consensusRankings || []);
+  renderRefinements('defRefinements',  data.definitionRefinements  || {}, 'amber');
+  renderRefinements('perfRefinements', data.performanceRefinements || {}, 'purple');
+  renderDivergence(data.consensusRankings || []);
 }
 
-function render() {
-  if (!submissions.length) return;
-  document.getElementById('emptyState').classList.add('hidden');
-  document.getElementById('dashContent').classList.remove('hidden');
-  document.getElementById('addMoreBtn').classList.remove('hidden');
-
-  const consensus = computeConsensus();
-  const n = submissions.length;
-  const avgSel = (submissions.reduce((a,s)=>a+s.totalSelected,0)/n).toFixed(1);
-
-  document.getElementById('statParticipants').textContent = n;
-  document.getElementById('statCriteria').textContent = consensus.length;
-  document.getElementById('statAvgSelected').textContent = avgSel;
-  document.getElementById('statTopCriteria').textContent = consensus[0]?.criteria.split(' ').slice(0,3).join(' ')+'…' || '—';
-
-  renderConsensusChart(consensus);
-  renderConsensusTable(consensus);
-  renderParticipants();
-  renderCategoryChart(consensus);
-  renderDivergence(consensus);
-}
-
-function renderConsensusChart(consensus) {
-  const top = consensus.slice(0, 15);
+/* ── Consensus tab ── */
+function renderConsensus(rankings) {
+  if (!rankings.length) {
+    document.getElementById('consensusChart').innerHTML = '<div class="empty-state">No ranking data yet.</div>';
+    document.getElementById('consensusTable').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem">No data yet.</td></tr>';
+    return;
+  }
+  const top = rankings.slice(0, 15);
   const maxScore = Math.max(...top.map(c => c.weightedScore));
   const catColors = { Product:'#378add', Manufacturer:'#639922', Service:'#7f77dd', Economic:'#ef9f27' };
   document.getElementById('consensusChart').innerHTML = top.map(c => {
     const pct = Math.round((1 - c.weightedScore / (maxScore + 1)) * 100);
-    const color = catColors[c.category] || '#888';
-    return `<div class="rank-bar-row">
-      <div class="rank-bar-label" title="${c.criteria}">${c.criteria}</div>
-      <div class="rank-bar-track"><div class="rank-bar-fill" style="width:${pct}%;background:${color}"></div></div>
-      <div class="rank-bar-val">${c.selectionRate < 1 ? Math.round(c.selectionRate*100)+'%' : 'All'}</div>
+    return `<div class="bar-row">
+      <div class="bar-label" title="${c.criteria}">${c.criteria}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${catColors[c.category]||'#888'}"></div></div>
+      <div class="bar-val">${Math.round(c.selectionRate * 100)}%</div>
     </div>`;
   }).join('');
-}
 
-function renderConsensusTable(consensus) {
-  const n = submissions.length;
-  document.getElementById('consensusTable').innerHTML = consensus.slice(0,10).map((c,i) => `
+  const n = summaryData?.meta?.totalParticipants || 1;
+  document.getElementById('consensusTable').innerHTML = rankings.slice(0, 10).map((c, i) => `
     <tr>
-      <td style="font-weight:500;color:var(--text2)">#${i+1}</td>
+      <td style="font-weight:500;color:var(--text2)">#${i + 1}</td>
       <td style="font-size:13px">${c.criteria}</td>
-      <td>${catBadge(c.category)}</td>
-      <td>${c.count} / ${n} (${Math.round(c.selectionRate*100)}%)</td>
-      <td style="font-weight:500">${c.weightedScore.toFixed(2)}</td>
-      <td>${agreementLabel(c.std)}</td>
+      <td><span class="badge cat-${c.category}">${c.category}</span></td>
+      <td>${c.count} / ${n} (${Math.round(c.selectionRate * 100)}%)</td>
+      <td>${(c.mean || 0).toFixed(1)}</td>
+      <td style="font-weight:500">${(c.weightedScore || 0).toFixed(2)}</td>
+      <td>${agreementBadge(c.std)}</td>
     </tr>`).join('');
 }
 
-function renderParticipants() {
-  const list = document.getElementById('participantList');
-  list.innerHTML = submissions.map(s => `
+function agreementBadge(std) {
+  if (std < 2) return '<span class="badge agr-high">High</span>';
+  if (std < 4) return '<span class="badge agr-med">Moderate</span>';
+  return '<span class="badge agr-low">Low</span>';
+}
+
+/* ── Participants tab ── */
+function renderParticipants(participants) {
+  if (!participants.length) {
+    document.getElementById('participantCards').innerHTML = '<div class="empty-state">No submissions yet.</div>';
+    document.getElementById('submissionLog').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem">No submissions yet.</td></tr>';
+    return;
+  }
+  document.getElementById('participantCards').innerHTML = participants.map(p => `
     <div class="participant-card">
-      <div class="participant-header">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px">
         <div>
-          <div class="participant-name">${s.name}</div>
-          <div class="participant-meta">${s.role}${s.department ? ' · ' + s.department : ''}${s.experience ? ' · ' + s.experience : ''}</div>
+          <div class="participant-name">${p['Name'] || '—'}</div>
+          <div class="participant-meta">${p['Role'] || ''}${p['Department'] ? ' · ' + p['Department'] : ''}${p['Years of Experience'] ? ' · ' + p['Years of Experience'] : ''}</div>
         </div>
-        <span style="font-size:12px;color:var(--text3)">${s.totalSelected} criteria · ${new Date(s.timestamp).toLocaleDateString('en-MY',{day:'numeric',month:'short',year:'numeric'})}</span>
+        <span style="font-size:12px;color:var(--text3)">${p['Total Criteria Selected'] || 0} criteria · ${formatDate(p['Timestamp'])}</span>
       </div>
-      <div class="mini-ranking">
-        ${s.rankings.slice(0,8).map(r=>`<div class="mini-rank-item"><span class="mini-rank-num">#${r.rank}</span>${r.criteria.length>40?r.criteria.slice(0,38)+'…':r.criteria}</div>`).join('')}
-        ${s.rankings.length>8?`<div class="mini-rank-item" style="color:var(--text3)">+${s.rankings.length-8} more</div>`:''}
+      <div class="mini-tags" style="margin-top:8px">
+        <span class="mini-tag">${p['Total Criteria Selected'] || 0} criteria selected</span>
+        <span class="mini-tag">${p['Total Performance Flagged'] || 0} perf. flagged</span>
       </div>
     </div>`).join('');
 
-  document.getElementById('submissionLog').innerHTML = submissions.map(s=>`
+  document.getElementById('submissionLog').innerHTML = participants.map(p => `
     <tr>
-      <td style="font-weight:500">${s.name}</td>
-      <td>${s.role}</td>
-      <td>${s.department||'—'}</td>
-      <td>${s.experience||'—'}</td>
-      <td>${s.totalSelected}</td>
-      <td style="color:var(--text2)">${new Date(s.timestamp).toLocaleString('en-MY')}</td>
+      <td style="font-weight:500">${p['Name'] || '—'}</td>
+      <td>${p['Role'] || '—'}</td>
+      <td>${p['Department'] || '—'}</td>
+      <td>${p['Years of Experience'] || '—'}</td>
+      <td>${p['Total Criteria Selected'] || 0}</td>
+      <td>${p['Total Performance Flagged'] || 0}</td>
+      <td style="color:var(--text2)">${formatDate(p['Timestamp'])}</td>
     </tr>`).join('');
 }
 
-function renderCategoryChart(consensus) {
-  const cats = ['Product','Manufacturer','Service','Economic'];
+/* ── Category tab ── */
+function renderCategory(rankings) {
+  if (!rankings.length) { document.getElementById('categoryChart').innerHTML = '<div class="empty-state">No data yet.</div>'; return; }
+  const cats = ['Product', 'Manufacturer', 'Service', 'Economic'];
+  const catColors = { Product:'#378add', Manufacturer:'#639922', Service:'#7f77dd', Economic:'#ef9f27' };
   const catData = cats.map(cat => {
-    const items = consensus.filter(c=>c.category===cat);
-    const avgScore = items.length ? items.reduce((a,c)=>a+c.weightedScore,0)/items.length : 0;
-    const totalSel = items.reduce((a,c)=>a+c.count,0);
-    return { cat, items, avgScore, totalSel };
-  }).sort((a,b)=>a.avgScore-b.avgScore);
-  const maxAvg = Math.max(...catData.map(c=>c.avgScore));
-  const badgeCls = { Product:'product', Manufacturer:'manufacturer', Service:'service', Economic:'economic' };
-
+    const items = rankings.filter(c => c.category === cat);
+    const avgScore = items.length ? items.reduce((a, c) => a + c.weightedScore, 0) / items.length : 0;
+    return { cat, items, avgScore };
+  }).sort((a, b) => a.avgScore - b.avgScore);
+  const maxAvg = Math.max(...catData.map(c => c.avgScore));
   document.getElementById('categoryChart').innerHTML = catData.map(c => {
-    const pct = maxAvg > 0 ? Math.round((1 - c.avgScore/maxAvg)*100) : 0;
-    return `<div style="margin-bottom:1.25rem">
+    const pct = maxAvg > 0 ? Math.round((1 - c.avgScore / maxAvg) * 100) : 0;
+    return `<div style="margin-bottom:1.5rem">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <div><span class="badge badge-${badgeCls[c.cat]}">${c.cat}</span> <span style="font-size:12px;color:var(--text2);margin-left:6px">${c.items.length} criteria</span></div>
+        <div><span class="badge cat-${c.cat}">${c.cat}</span> <span style="font-size:12px;color:var(--text2);margin-left:6px">${c.items.length} criteria</span></div>
         <span style="font-size:12px;color:var(--text2)">avg score ${c.avgScore.toFixed(2)}</span>
       </div>
-      <div class="rank-bar-track" style="height:12px"><div class="rank-bar-fill" style="width:${pct}%;height:100%"></div></div>
-      <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">
-        ${c.items.slice(0,4).map(item=>`<span style="font-size:11px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:2px 8px">${item.criteria.length>40?item.criteria.slice(0,38)+'…':item.criteria}</span>`).join('')}
-        ${c.items.length>4?`<span style="font-size:11px;color:var(--text3)">+${c.items.length-4} more</span>`:''}
+      <div class="bar-track" style="height:12px"><div class="bar-fill" style="width:${pct}%;background:${catColors[c.cat]};height:100%"></div></div>
+      <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+        ${c.items.slice(0, 5).map(item => `<span class="mini-tag">${item.criteria.length > 38 ? item.criteria.slice(0, 36) + '…' : item.criteria}</span>`).join('')}
+        ${c.items.length > 5 ? `<span style="font-size:11px;color:var(--text3);padding:2px 4px">+${c.items.length - 5} more</span>` : ''}
       </div>
     </div>`;
   }).join('');
 }
 
-function renderDivergence(consensus) {
-  const sorted = [...consensus].sort((a,b)=>b.std-a.std).slice(0,10);
-  const maxStd = Math.max(...sorted.map(c=>c.std));
-  document.getElementById('divergenceList').innerHTML = sorted.map(c => {
-    const pct = maxStd > 0 ? Math.round((c.std/maxStd)*100) : 0;
-    const cls = c.std >= 4 ? 'agr-low' : c.std >= 2 ? 'agr-med' : 'agr-high';
-    const lbl = c.std >= 4 ? 'High disagreement' : c.std >= 2 ? 'Moderate' : 'Good agreement';
-    return `<div class="rank-bar-row" style="margin-bottom:10px">
-      <div class="rank-bar-label" title="${c.criteria}">${c.criteria}</div>
-      <div class="rank-bar-track"><div class="rank-bar-fill" style="width:${pct}%;background:#e24b4a"></div></div>
-      <span class="agreement-badge ${cls}" style="min-width:120px;text-align:center">${lbl} (σ=${c.std.toFixed(1)})</span>
+/* ── Refinements tabs (shared renderer) ── */
+function renderRefinements(containerId, refinementsMap, colour) {
+  const el = document.getElementById(containerId);
+  const keys = Object.keys(refinementsMap);
+  if (!keys.length) { el.innerHTML = '<div class="empty-state">No refinements proposed yet.</div>'; return; }
+  el.innerHTML = keys.map(criteria => {
+    const proposals = refinementsMap[criteria];
+    const cat = proposals[0] ? '' : '';
+    return `<div class="refine-item">
+      <div class="refine-header">
+        <div class="refine-name">${criteria}</div>
+        <span style="font-size:11px;color:var(--text3);margin-left:auto">${proposals.length} proposal${proposals.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="refine-body">
+        ${proposals.map(p => `
+          <div class="refine-proposal ${colour === 'purple' ? 'purple' : ''}">
+            ${p.proposed}
+            <div class="refine-by">— ${p.name}${p.role ? ', ' + p.role : ''}</div>
+          </div>`).join('')}
+      </div>
     </div>`;
   }).join('');
 }
 
-function exportFullCSV() {
-  if (!submissions.length) { alert('No data to export.'); return; }
-  let csv = 'Timestamp,Name,Role,Department,Experience,Rank,Criteria,Category\n';
-  submissions.forEach(s => {
-    s.rankings.forEach(r => {
-      csv += `"${s.timestamp}","${s.name}","${s.role}","${s.department}","${s.experience}","${r.rank}","${r.criteria}","${r.category}"\n`;
-    });
+/* ── Divergence tab ── */
+function renderDivergence(rankings) {
+  if (!rankings.length) { document.getElementById('divergenceChart').innerHTML = '<div class="empty-state">No data yet.</div>'; return; }
+  const sorted = [...rankings].sort((a, b) => b.std - a.std).slice(0, 12);
+  const maxStd = Math.max(...sorted.map(c => c.std));
+  document.getElementById('divergenceChart').innerHTML = sorted.map(c => {
+    const pct = maxStd > 0 ? Math.round((c.std / maxStd) * 100) : 0;
+    const cls = c.std >= 4 ? 'agr-low' : c.std >= 2 ? 'agr-med' : 'agr-high';
+    const lbl = c.std >= 4 ? 'High disagreement' : c.std >= 2 ? 'Moderate' : 'Good agreement';
+    return `<div class="bar-row" style="margin-bottom:10px">
+      <div class="bar-label" title="${c.criteria}">${c.criteria}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:#e24b4a"></div></div>
+      <span class="badge ${cls}" style="min-width:130px;text-align:center">${lbl} (σ=${(c.std || 0).toFixed(1)})</span>
+    </div>`;
+  }).join('');
+}
+
+/* ── Export CSV ── */
+function exportCSV() {
+  if (!summaryData) { alert('No data loaded yet. Click Refresh first.'); return; }
+  const participants = summaryData.participants || [];
+  const rankings = summaryData.consensusRankings || [];
+  let csv = 'Type,Name,Role,Department,Experience,Rank,Criteria,Category,Mean Rank,Weighted Score,Std Dev,Selection Rate\n';
+  const esc = v => '"' + String(v || '').replace(/"/g, '""') + '"';
+  participants.forEach(p => {
+    csv += [esc('Participant'), esc(p['Name']), esc(p['Role']), esc(p['Department']),
+            esc(p['Years of Experience']), '', esc(p['Total Criteria Selected'] + ' criteria selected'),
+            '', '', '', '', ''].join(',') + '\n';
   });
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `focus_group_all_submissions_${new Date().toISOString().slice(0,10)}.csv`;
+  rankings.forEach((c, i) => {
+    csv += ['', '', '', '', '', i + 1, esc(c.criteria), esc(c.category),
+            (c.mean || 0).toFixed(2), (c.weightedScore || 0).toFixed(2),
+            (c.std || 0).toFixed(2), Math.round((c.selectionRate || 0) * 100) + '%'].join(',') + '\n';
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `focus_group_results_${new Date().toISOString().slice(0, 10)}.csv`;
   a.click(); URL.revokeObjectURL(url);
 }
 
-function clearAll() {
-  if (!confirm('Clear all imported data?')) return;
-  submissions = [];
-  document.getElementById('dashContent').classList.add('hidden');
-  document.getElementById('addMoreBtn').classList.add('hidden');
-  document.getElementById('emptyState').classList.remove('hidden');
+function formatDate(ts) {
+  if (!ts) return '—';
+  try { return new Date(ts).toLocaleString('en-MY', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+  catch { return ts; }
 }
+
+init();
 </script>
 </body>
 </html>
