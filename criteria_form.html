@@ -4,162 +4,178 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Delphi Questionnaire — Pharmaceutical Criteria Prioritisation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg:#ffffff; --bg2:#f7f7f5; --bg3:#f0eeea;
-  --text:#1a1a1a; --text2:#6b6b68; --text3:#9b9b98;
-  --border:rgba(0,0,0,0.12); --border2:rgba(0,0,0,0.22);
-  --blue-bg:#e6f1fb; --blue-text:#0c447c;
-  --green-bg:#eaf3de; --green-text:#27500a;
-  --amber-bg:#faeeda; --amber-text:#633806;
-  --purple-bg:#eeedfe; --purple-text:#3c3489;
-  --red-bg:#fcebeb; --red-text:#a32d2d;
-  --radius:8px; --radius-lg:12px;
+  --usm-purple:       #2F015D;
+  --usm-purple-light: #EDE8F5;
+  --usm-purple-mid:   #C4B3E0;
+  --usm-orange:       #FF7300;
+  --usm-orange-light: #FFF0E6;
+  --usm-orange-mid:   #FFD4B0;
+  --bg:    #FFFFFF;
+  --bg2:   #FAF8F5;
+  --bg3:   #F3EFE9;
+  --text:  #1C1C1C;
+  --text2: #5C5A57;
+  --text3: #9E9B96;
+  --border:  rgba(47,1,93,0.1);
+  --border2: rgba(47,1,93,0.22);
+  --blue-bg:    #EDE8F5;
+  --blue-text:  #2F015D;
+  --amber-bg:   #FFF0E6;
+  --amber-text: #7A3500;
+  --green-bg:   #EAF3DE;
+  --green-text: #27500A;
+  --purple-bg:  #EDE8F5;
+  --purple-text:#2F015D;
+  --red-bg:     #FCEBEB;
+  --red-text:   #A32D2D;
+  --radius:    10px;
+  --radius-lg: 14px;
 }
-body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg2); color:var(--text); font-size:15px; line-height:1.6; min-height:100vh; }
+body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg2); color:var(--text); font-size:15px; line-height:1.65; min-height:100vh; -webkit-font-smoothing:antialiased; }
 .page { max-width:900px; margin:0 auto; padding:2rem 1.25rem 4rem; }
-
 /* ── Header ── */
 .form-header { margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; }
-.form-header h1 { font-size:22px; font-weight:500; margin-bottom:3px; }
+.form-header h1 { font-size:22px; font-weight:600; color:var(--usm-purple); margin-bottom:3px; letter-spacing:-0.01em; }
 .form-header p { font-size:14px; color:var(--text2); }
-.version-badge { font-size:12px; color:var(--text3); background:var(--bg3); padding:3px 10px; border-radius:20px; white-space:nowrap; }
-
-/* ── Progress stepper ── */
+.version-badge { font-size:12px; color:var(--usm-purple); background:var(--usm-purple-light); padding:3px 12px; border-radius:20px; white-space:nowrap; font-weight:500; }
+/* ── Stepper ── */
 .progress-wrap { margin-bottom:2rem; overflow-x:auto; }
 .progress-steps { display:flex; align-items:center; min-width:600px; }
 .step-node { display:flex; align-items:center; flex:1; }
 .step-node:last-child { flex:0; }
 .step-dot { width:68px; height:68px; border-radius:50%; border:1.5px solid var(--border2); background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; flex-shrink:0; transition:all .3s; cursor:default; }
-.step-dot-num { font-size:17px; font-weight:500; color:var(--text2); line-height:1; }
+.step-dot-num { font-size:17px; font-weight:600; color:var(--text3); line-height:1; }
 .step-dot-lbl { font-size:8.5px; font-weight:500; color:var(--text3); text-align:center; line-height:1.2; max-width:58px; padding:0 3px; }
-.step-dot.active { background:var(--text); border-color:var(--text); }
-.step-dot.active .step-dot-num { color:var(--bg); }
-.step-dot.active .step-dot-lbl { color:rgba(255,255,255,0.72); }
-.step-dot.done { background:var(--bg3); border-color:var(--border2); }
-.step-dot.done .step-dot-num { color:var(--text3); font-size:18px; }
-.step-dot.done .step-dot-lbl { color:var(--text3); }
-.step-line { flex:1; height:1.5px; background:var(--border2); transition:background .3s; margin:0 3px; }
-.step-line.done { background:var(--text); }
-
+.step-dot.active { background:var(--usm-purple); border-color:var(--usm-purple); }
+.step-dot.active .step-dot-num { color:#fff; }
+.step-dot.active .step-dot-lbl { color:rgba(255,255,255,0.75); }
+.step-dot.done { background:var(--usm-purple-light); border-color:var(--usm-purple-mid); }
+.step-dot.done .step-dot-num { color:var(--usm-purple); font-size:18px; }
+.step-dot.done .step-dot-lbl { color:var(--usm-purple); }
+.step-line { flex:1; height:1.5px; background:var(--border); transition:background .3s; margin:0 3px; }
+.step-line.done { background:var(--usm-purple-mid); }
 /* ── Cards ── */
-.card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.25rem; }
-.q-label { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px; }
-.q-title { font-size:17px; font-weight:500; margin-bottom:.4rem; line-height:1.45; }
-.hint { font-size:13px; color:var(--text2); margin-bottom:1rem; line-height:1.55; }
-.section-lbl { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
-
+.card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:1.75rem; margin-bottom:1.25rem; box-shadow:0 1px 4px rgba(47,1,93,0.06); }
+.q-label { font-size:11px; font-weight:600; color:var(--usm-orange); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; }
+.q-title { font-size:18px; font-weight:600; color:var(--usm-purple); margin-bottom:.5rem; line-height:1.4; letter-spacing:-0.01em; }
+.hint { font-size:13px; color:var(--text2); margin-bottom:1rem; line-height:1.6; }
+.section-lbl { font-size:11px; font-weight:600; color:var(--usm-orange); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+.divider { border:none; border-top:0.5px solid var(--border); margin:1.25rem 0; }
 /* ── Inputs ── */
-input[type=text] { width:100%; padding:9px 12px; font-size:14px; font-family:inherit; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--bg); color:var(--text); outline:none; }
-input[type=text]:focus { border-color:#555; box-shadow:0 0 0 2px rgba(0,0,0,0.06); }
-textarea { width:100%; padding:9px 12px; font-size:13px; font-family:inherit; border:0.5px solid var(--border2); border-radius:var(--radius); background:var(--bg); color:var(--text); outline:none; resize:vertical; line-height:1.6; }
-textarea:focus { border-color:#555; box-shadow:0 0 0 2px rgba(0,0,0,0.06); }
-.field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
-label.field-label { display:block; font-size:12px; color:var(--text2); margin-bottom:4px; font-weight:500; }
-
-/* ── Buttons / footer ── */
-.footer { display:flex; justify-content:space-between; align-items:center; margin-top:1.25rem; flex-wrap:wrap; gap:10px; }
-.btn { display:inline-flex; align-items:center; gap:6px; padding:9px 20px; font-size:14px; font-family:inherit; font-weight:500; border:0.5px solid var(--border2); border-radius:var(--radius); background:transparent; color:var(--text); cursor:pointer; transition:background .15s; }
-.btn:hover { background:var(--bg2); }
+input[type=text],select,textarea { font-family:'Inter',sans-serif; font-size:14px; color:var(--text); background:var(--bg); border:1px solid var(--border2); border-radius:var(--radius); outline:none; transition:border-color .15s,box-shadow .15s; }
+input[type=text] { width:100%; padding:10px 13px; }
+input[type=text]:focus { border-color:var(--usm-purple); box-shadow:0 0 0 3px rgba(47,1,93,0.1); }
+textarea { width:100%; padding:10px 13px; resize:vertical; line-height:1.6; }
+textarea:focus { border-color:var(--usm-purple); box-shadow:0 0 0 3px rgba(47,1,93,0.1); }
+select:focus { border-color:var(--usm-purple); box-shadow:0 0 0 3px rgba(47,1,93,0.1); }
+.field-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+label.field-label { display:block; font-size:12px; font-weight:600; color:var(--text2); margin-bottom:5px; }
+/* ── Buttons ── */
+.footer { display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem; flex-wrap:wrap; gap:10px; }
+.sel-count { font-size:13px; color:var(--text2); }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:10px 22px; font-size:14px; font-family:'Inter',sans-serif; font-weight:500; border:1.5px solid var(--border2); border-radius:var(--radius); background:transparent; color:var(--text); cursor:pointer; transition:all .15s; }
+.btn:hover { background:var(--bg3); border-color:var(--usm-purple); color:var(--usm-purple); }
 .btn:active { transform:scale(0.98); }
-.btn-primary { background:var(--text); color:var(--bg); border-color:var(--text); }
-.btn-primary:hover { opacity:.85; background:var(--text); }
+.btn-primary { background:var(--usm-purple); color:#fff; border-color:var(--usm-purple); }
+.btn-primary:hover { background:#3d0178; border-color:#3d0178; color:#fff; }
 .btn-primary:disabled { opacity:.35; cursor:not-allowed; transform:none; }
-
-/* ── Category badges ── */
-.cat-badge { font-size:11px; font-weight:500; padding:2px 8px; border-radius:var(--radius); display:inline-block; }
-.cat-Product      { background:var(--blue-bg);   color:var(--blue-text); }
-.cat-Manufacturer { background:var(--green-bg);  color:var(--green-text); }
-.cat-Service      { background:var(--purple-bg); color:var(--purple-text); }
-.cat-Economic     { background:var(--amber-bg);  color:var(--amber-text); }
-
-/* ── Q1 / Q4 Tables ── */
+/* ── Badges ── */
+.cat-badge { font-size:11px; font-weight:600; padding:2px 9px; border-radius:20px; display:inline-block; letter-spacing:.02em; }
+.cat-Product      { background:var(--usm-purple-light); color:var(--usm-purple); }
+.cat-Manufacturer { background:#EAF3DE; color:#27500A; }
+.cat-Service      { background:var(--usm-orange-light); color:#7A3500; }
+.cat-Economic     { background:#FFF8E1; color:#6D4C00; }
+/* ── Tables ── */
 table { width:100%; border-collapse:collapse; }
-thead th { font-size:11px; font-weight:500; color:var(--text2); text-align:left; padding:7px 10px; border-bottom:0.5px solid var(--border); background:var(--bg2); }
-thead th:first-child { width:40px; text-align:center; }
-tbody tr { border-bottom:0.5px solid var(--border); transition:background .1s; cursor:pointer; }
+thead th { font-size:11px; font-weight:600; color:var(--usm-purple); text-align:left; padding:8px 12px; border-bottom:1.5px solid var(--usm-purple-mid); background:var(--usm-purple-light); letter-spacing:.04em; text-transform:uppercase; }
+tbody tr { border-bottom:0.5px solid var(--border); transition:background .1s; }
 tbody tr:last-child { border-bottom:none; }
 tbody tr:hover { background:var(--bg2); }
-tbody tr.selected { background:var(--blue-bg); }
-tbody tr.flagged { background:var(--red-bg); }
-td { padding:10px; vertical-align:top; }
+tbody tr.selected { background:var(--usm-purple-light); }
+tbody tr.flagged { background:var(--usm-orange-light); }
+td { padding:12px; vertical-align:top; }
 td:first-child { text-align:center; vertical-align:middle; }
-input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:pointer; }
-.crit-name { font-weight:500; font-size:13px; }
-.crit-desc { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.55; }
-.cat-header td { background:var(--bg3); font-size:11px; font-weight:500; color:var(--text2); text-transform:uppercase; letter-spacing:.05em; padding:5px 10px; pointer-events:none; cursor:default; }
+input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); cursor:pointer; }
+.crit-name { font-weight:600; font-size:13px; color:var(--text); }
+.crit-desc { font-size:12px; color:var(--text2); margin-top:3px; line-height:1.6; }
+.cat-header td { background:var(--bg3); font-size:11px; font-weight:600; color:var(--usm-purple); text-transform:uppercase; letter-spacing:.05em; padding:5px 12px; pointer-events:none; cursor:default; }
 .perf-levels-list { list-style:none; padding:0; margin:0; }
-.perf-levels-list li { font-size:12px; color:var(--text2); padding:4px 0; border-top:0.5px solid var(--border); line-height:1.55; }
+.perf-levels-list li { font-size:12px; color:var(--text2); padding:5px 0; border-top:0.5px solid var(--border); line-height:1.55; }
 .perf-levels-list li:first-child { border-top:none; padding-top:0; }
-.perf-level-num { font-weight:500; color:var(--text); margin-right:3px; }
-
-/* ── Q2 / Q5 review items ── */
+.perf-level-num { font-weight:600; color:var(--usm-purple); margin-right:3px; }
+/* ── Review items ── */
 .review-item { border:0.5px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; }
-.review-item-header { background:var(--bg2); padding:12px 14px; border-bottom:0.5px solid var(--border); }
-.review-item-counter { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
-.review-item-name { font-size:14px; font-weight:500; color:var(--text); margin-bottom:8px; display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
-.review-sub-lbl { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; margin-top:10px; }
-.review-sub-lbl:first-of-type { margin-top:0; }
-.review-text-box { font-size:13px; color:var(--text2); line-height:1.65; background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius); padding:10px 12px; }
-.review-item-body { padding:12px 14px; }
-.review-proposed-lbl { font-size:12px; font-weight:500; color:var(--text2); margin-bottom:5px; }
+.review-item-header { background:var(--bg2); padding:12px 16px; border-bottom:0.5px solid var(--border); }
+.review-item-counter { font-size:11px; font-weight:600; color:var(--usm-orange); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+.review-item-name { font-size:14px; font-weight:600; color:var(--usm-purple); margin-bottom:8px; display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
+.review-sub-lbl { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; margin-top:10px; }
+.review-text-box { font-size:13px; color:var(--text2); line-height:1.65; background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius); padding:10px 13px; }
+.review-item-body { padding:12px 16px; }
+.review-proposed-lbl { font-size:12px; font-weight:600; color:var(--text2); margin-bottom:5px; }
 .review-optional { font-weight:400; color:var(--text3); }
-
-/* ── Q3 Ranking ── */
+/* ── Criterion cards ── */
+.crit-card { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; cursor:pointer; transition:background .1s,border-color .15s; background:var(--bg); }
+.crit-card:hover { background:var(--bg2); border-color:var(--usm-purple-mid); }
+.crit-card.selected { background:var(--usm-purple-light); border-color:var(--usm-purple-mid); }
+.crit-card-chk { margin-top:2px; flex-shrink:0; }
+.crit-card-body { flex:1; }
+.crit-card-name { font-size:14px; font-weight:600; color:var(--usm-purple); margin-bottom:4px; }
+.crit-card-desc { font-size:13px; color:var(--text2); line-height:1.65; }
+.crit-section-title { font-size:15px; font-weight:600; color:var(--usm-purple); margin-bottom:4px; margin-top:1.5rem; }
+.crit-section-title:first-of-type { margin-top:0; }
+.crit-section-hint { font-size:13px; color:var(--text2); margin-bottom:12px; line-height:1.55; }
+/* ── Ranking ── */
 .rank-list { list-style:none; }
-.rank-item { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; border:0.5px solid var(--border); border-radius:var(--radius); margin-bottom:6px; background:var(--bg); cursor:grab; user-select:none; transition:background .1s, border-color .1s; }
-.rank-item:hover { border-color:var(--border2); background:var(--bg2); }
+.rank-item { display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; background:var(--bg); cursor:grab; user-select:none; transition:background .1s,border-color .1s; }
+.rank-item:hover { border-color:var(--usm-purple-mid); background:var(--bg2); }
 .rank-item.dragging { opacity:.4; }
-.rank-item.drag-over { border-color:#1a1a1a; background:var(--bg3); }
-.drag-handle { display:flex; flex-direction:column; gap:3px; padding:4px 2px; flex-shrink:0; margin-top:3px; opacity:.35; }
-.drag-handle span { display:block; width:14px; height:1.5px; background:var(--text); border-radius:1px; }
-.rank-num { min-width:26px; height:26px; border-radius:50%; background:var(--bg2); border:0.5px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:500; flex-shrink:0; margin-top:1px; }
-
-/* ── Delphi intro page ── */
+.rank-item.drag-over { border-color:var(--usm-purple); background:var(--usm-purple-light); }
+.drag-handle { display:flex; flex-direction:column; gap:3px; padding:4px 2px; flex-shrink:0; margin-top:3px; opacity:.3; }
+.drag-handle span { display:block; width:14px; height:1.5px; background:var(--usm-purple); border-radius:1px; }
+.rank-num { min-width:28px; height:28px; border-radius:50%; background:var(--usm-purple-light); border:1px solid var(--usm-purple-mid); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:var(--usm-purple); flex-shrink:0; margin-top:1px; }
+/* ── Intro ── */
 .intro-rounds { display:flex; gap:8px; margin-bottom:1.5rem; }
-.round-pip { display:flex; align-items:flex-start; gap:10px; background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius); padding:12px 14px; flex:1; }
-.round-num-circle { width:28px; height:28px; border-radius:50%; background:var(--text); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0; margin-top:1px; }
-.round-text { font-size:12px; color:var(--text2); line-height:1.5; }
-.round-text strong { font-weight:500; color:var(--text); display:block; margin-bottom:2px; }
+.round-pip { display:flex; align-items:flex-start; gap:10px; background:var(--usm-purple-light); border:0.5px solid var(--usm-purple-mid); border-radius:var(--radius); padding:12px 14px; flex:1; }
+.round-num-circle { width:28px; height:28px; border-radius:50%; background:var(--usm-purple); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0; margin-top:1px; }
+.round-text { font-size:12px; color:var(--usm-purple); line-height:1.5; }
+.round-text strong { font-weight:600; color:var(--usm-purple); display:block; margin-bottom:2px; }
 .cases-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.5rem; }
-.case-pip { background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius); padding:12px 14px; }
-.case-pip-num { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
-.case-pip-name { font-size:14px; font-weight:500; }
-.case-pip-name.tbc { color:var(--text3); font-style:italic; font-weight:400; font-size:13px; }
-.divider { border:none; border-top:0.5px solid var(--border); margin:1.25rem 0; }
-.about-text { font-size:13px; color:var(--text2); line-height:1.75; }
+.case-pip { background:var(--usm-orange-light); border:0.5px solid var(--usm-orange-mid); border-radius:var(--radius); padding:12px 14px; }
+.case-pip-num { font-size:11px; font-weight:600; color:var(--usm-orange); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+.case-pip-name { font-size:14px; font-weight:600; color:#7A3500; }
+.about-text { font-size:13px; color:var(--text2); line-height:1.8; }
 .about-text p { margin-bottom:10px; }
 .about-text p:last-child { margin-bottom:0; }
-.info-box { background:var(--blue-bg); border-radius:var(--radius); padding:12px 14px; margin-top:1rem; }
-.info-box p { font-size:13px; color:var(--blue-text); line-height:1.65; margin:0; }
-
+.info-box { background:var(--usm-purple-light); border-radius:var(--radius); padding:14px 16px; margin-top:1rem; border:0.5px solid var(--usm-purple-mid); }
+.info-box p { font-size:13px; color:var(--usm-purple); line-height:1.65; margin:0; }
 /* ── Decision problem ── */
-.dp-field { background:var(--bg2); border-radius:var(--radius); padding:14px 16px; margin-bottom:10px; }
-.dp-field-lbl { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px; }
-.dp-field-val { font-size:13px; color:var(--text); line-height:1.65; }
-
+.dp-field { background:var(--bg2); border-radius:var(--radius); padding:14px 16px; margin-bottom:10px; border:0.5px solid var(--border); }
+.dp-field-lbl { font-size:11px; font-weight:600; color:var(--usm-orange); text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px; }
+.dp-field-val { font-size:13px; color:var(--text); line-height:1.7; }
 /* ── Case intro ── */
-.case-intro-eyebrow { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px; }
-.case-intro-title { font-size:24px; font-weight:500; margin-bottom:4px; }
+.case-intro-eyebrow { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px; }
+.case-intro-title { font-size:26px; font-weight:600; color:var(--usm-purple); margin-bottom:4px; letter-spacing:-0.01em; }
 .case-intro-sub { font-size:14px; color:var(--text2); margin-bottom:1.5rem; padding-bottom:1.25rem; border-bottom:0.5px solid var(--border); }
 .case-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1.25rem; }
-.case-detail { background:var(--bg2); border-radius:var(--radius); padding:12px 14px; }
+.case-detail { background:var(--bg2); border-radius:var(--radius); padding:12px 14px; border:0.5px solid var(--border); }
 .case-detail.full { grid-column:1/-1; }
-.case-detail-lbl { font-size:11px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px; }
+.case-detail-lbl { font-size:11px; font-weight:600; color:var(--usm-orange); text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px; }
 .case-detail-val { font-size:13px; color:var(--text); line-height:1.65; }
 .case-detail-val ul { padding-left:16px; }
 .case-detail-val ul li { margin-bottom:3px; }
-.case-notice { display:flex; gap:10px; background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius); padding:12px 14px; align-items:flex-start; }
-.case-notice-i { width:18px; height:18px; border-radius:50%; background:var(--text3); color:var(--bg); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:500; flex-shrink:0; margin-top:1px; }
-.case-notice p { font-size:13px; color:var(--text2); line-height:1.6; margin:0; }
-
+.case-notice { display:flex; gap:10px; background:var(--usm-purple-light); border:0.5px solid var(--usm-purple-mid); border-radius:var(--radius); padding:12px 14px; align-items:flex-start; }
+.case-notice-i { width:18px; height:18px; border-radius:50%; background:var(--usm-purple); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex-shrink:0; margin-top:1px; }
+.case-notice p { font-size:13px; color:var(--usm-purple); line-height:1.6; margin:0; }
 /* ── Success ── */
-.success-box { background:var(--green-bg); border:0.5px solid rgba(63,110,17,.25); border-radius:var(--radius-lg); padding:1.5rem; text-align:center; }
-.success-box h2 { font-size:18px; font-weight:500; color:var(--green-text); margin-bottom:6px; }
-.success-box p { font-size:14px; color:var(--green-text); opacity:.85; }
-
-.sel-count { font-size:13px; color:var(--text2); }
+.success-box { background:var(--usm-purple-light); border:0.5px solid var(--usm-purple-mid); border-radius:var(--radius-lg); padding:2rem; text-align:center; }
+.success-box h2 { font-size:20px; font-weight:600; color:var(--usm-purple); margin-bottom:8px; }
+.success-box p { font-size:14px; color:var(--usm-purple); opacity:.85; }
 .hidden { display:none; }
 @media(max-width:640px) {
   .field-row { grid-template-columns:1fr; }
@@ -175,8 +191,9 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
 
   <div class="form-header">
     <div>
-      <h1>Delphi questionnaire</h1>
-      <p>Pharmaceutical Criteria Prioritisation — MOHE Facilities</p>
+      <h1>Modified Delphi for USM-affiliated healthcare facilities</h1>
+      <p>Round 1: Criteria elicitation</p>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-top:6px;max-width:620px">Thank you for participating in this modified Delphi study. Your feedback is valuable to develop a context-relevant value-based procurement tool. Your responses will remain anonymous. The survey will take approximately 20–30 minutes.</p>
     </div>
     <span class="version-badge" id="versionBadge">v—</span>
   </div>
@@ -192,17 +209,17 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
        STEP 0 — Participant details
   ══════════════════════════════════════════ -->
   <div id="step-details" class="card hidden">
-    <div class="q-label">Before you begin</div>
-    <div class="q-title">Participant information</div>
-    <p class="hint">Please fill in your details. This helps the facilitator track submissions and follow up with you directly for clarification between rounds.</p>
+    <div class="q-title" style="font-size:15px;margin-bottom:6px">Participant information</div>
+    <p class="hint">Please fill in your details.</p>
     <div class="field-row">
       <div><label class="field-label">Full name *</label><input type="text" id="partName" placeholder="e.g. Dr. Ahmad bin Yusof" /></div>
       <div><label class="field-label">Designation / role *</label><input type="text" id="partRole" placeholder="e.g. Clinical Pharmacist" /></div>
     </div>
     <div class="field-row">
-      <div><label class="field-label">Department / institution</label><input type="text" id="partDept" placeholder="e.g. Hospital Kuala Lumpur" /></div>
-      <div><label class="field-label">Years of experience in this domain</label><input type="text" id="partExp" placeholder="e.g. 12 years" /></div>
+      <div><label class="field-label">Institution *</label><input type="text" id="partDept" placeholder="e.g. Hospital Pakar USM" /></div>
+      <div><label class="field-label">Years of pharmaceutical procurement experience *</label><input type="text" id="partExp" placeholder="e.g. 12 years" /></div>
     </div>
+    <div id="detailsValidationMsg" class="hidden" style="font-size:13px;color:#a32d2d;margin-bottom:8px">Please fill in all fields before proceeding.</div>
     <div class="footer"><span></span><button class="btn btn-primary" onclick="nav('intro')">Start &#8594;</button></div>
   </div>
 
@@ -212,33 +229,11 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
   <div id="step-intro" class="card hidden">
     <div class="q-label">Introduction</div>
     <div class="q-title">Delphi questionnaire</div>
-    <p class="hint">Please read the following carefully before proceeding. This questionnaire is part of a structured expert consensus study on pharmaceutical procurement evaluation criteria.</p>
 
-    <div class="section-lbl" style="margin-bottom:10px">Study structure — 3 rounds</div>
-    <div class="intro-rounds">
-      <div class="round-pip"><div class="round-num-circle">1</div><div class="round-text"><strong>Round 1</strong>Your independent assessment of the criteria, definitions and performance levels.</div></div>
-      <div class="round-pip"><div class="round-num-circle">2</div><div class="round-text"><strong>Round 2</strong>Review anonymised group feedback and revise your responses accordingly.</div></div>
-      <div class="round-pip"><div class="round-num-circle">3</div><div class="round-text"><strong>Round 3</strong>Confirm or adjust your final positions based on consolidated panel findings.</div></div>
-    </div>
-
-    <div class="section-lbl" style="margin-bottom:8px">Procurement cases</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6">The same set of questions will be repeated across three procurement cases. Please evaluate each case independently based on your professional experience and knowledge.</p>
-    <div class="cases-grid">
-      <div class="case-pip"><div class="case-pip-num">Procurement case 1</div><div class="case-pip-name">Amlodipine</div></div>
-      <div class="case-pip"><div class="case-pip-num">Procurement case 2</div><div class="case-pip-name">Metformin</div></div>
-      <div class="case-pip"><div class="case-pip-num">Procurement case 3</div><div class="case-pip-name">Atorvastatin</div></div>
-    </div>
-
-    <div class="divider"></div>
-    <div style="font-size:15px;font-weight:500;margin-bottom:10px">About the Delphi method</div>
     <div class="about-text">
-      <p>The Delphi method is a structured, iterative research technique designed to reach expert consensus on complex topics where direct empirical evidence is limited or where professional judgment plays a central role. Originally developed at the RAND Corporation in the 1950s, it has since become a widely accepted approach in healthcare, policy development, and clinical guideline formation.</p>
-      <p>The process works through a series of questionnaire rounds. Experts respond independently, which removes the influence of dominant voices and encourages honest, unbiased input. After each round, the facilitator compiles and shares a summary of the group's responses. Participants then review this collective feedback and have the opportunity to revise their own positions in the following round. This cycle of response, reflection, and revision continues until the group reaches a stable level of agreement — known as consensus.</p>
-      <p>In this study, three rounds will be conducted. Each round builds on the previous one, progressively narrowing the range of expert opinion and identifying both areas of strong agreement and areas requiring further discussion.</p>
+      <p>This Modified Delphi will be carried out in 3 consecutive rounds. In this Round 1, you will be expected to assess the decision problem, criteria, definition and performance levels related to three procurement cases. The same set of questions will be repeated across three procurement cases. Please evaluate each case independently based on your professional experience and knowledge.</p>
     </div>
-    <div class="info-box">
-      <p>Your responses in each round are compiled and reviewed only by the research facilitator. While your name and professional details are collected to allow the facilitator to follow up with you directly for clarification between rounds, your individual responses will not be attributed to you or shared with other panel members. Only anonymised, aggregated group summaries will be circulated as feedback between rounds.</p>
-    </div>
+
     <div class="footer">
       <button class="btn" onclick="nav('details')">&#8592; Back</button>
       <button class="btn btn-primary" onclick="nav('decision')">Next &#8594;</button>
@@ -249,18 +244,13 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
        STEP 2 — Decision problem
   ══════════════════════════════════════════ -->
   <div id="step-decision" class="card hidden">
-    <div class="q-title">Does this decision problem accurately reflect the scope of the decision problem? If not, suggest how it can be improved.</div>
-    <p class="hint">Please review the decision problem statement and context below, then indicate whether you agree or wish to suggest amendments.</p>
+    <div class="q-title">Does this decision problem accurately reflect the scope of the decision problem?</div>
+    <div class="q-title" style="margin-bottom:.75rem">If not, suggest how it can be improved.</div>
 
     <div class="dp-field"><div class="dp-field-lbl">Decision problem</div><div class="dp-field-val">Evaluation of the performance of Off-Patent Pharmaceutical (OPP) alternatives in the tender procurement in Malaysia's MOHE facilities to achieve the highest value-for-money.</div></div>
-    <div class="dp-field"><div class="dp-field-lbl">Context</div><div class="dp-field-val">MOHE facilities. Decision makers include procurement personnel and tender committee members.</div></div>
-    <div class="dp-field"><div class="dp-field-lbl">Alternatives</div><div class="dp-field-val">Off-patent tender bids from manufacturers for the same active ingredient.</div></div>
-    <div class="dp-field"><div class="dp-field-lbl">Users</div><div class="dp-field-val">Decision makers will use this to evaluate bids to identify the OPP of highest value.</div></div>
-    <div class="dp-field"><div class="dp-field-lbl">Scope</div><div class="dp-field-val">Multi-stakeholder (physician, pharmacist, procurement personnel), for the annual tender process (time horizon), considering both technical and financial performances.</div></div>
-    <div class="dp-field"><div class="dp-field-lbl">Evidence</div><div class="dp-field-val">ISPOR good practice guidelines, MCDA guidances, and current scoring scheme.</div></div>
 
     <div style="margin-top:1.25rem">
-      <div class="review-proposed-lbl" style="font-size:13px;font-weight:500;margin-bottom:10px">Please state below if you agree or suggest amendments to this</div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px">Please state below if you agree or suggest amendments to this <span style="color:#a32d2d">*</span></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <label style="display:flex;align-items:center;gap:8px;padding:10px 16px;border:0.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500;transition:background .1s" id="dp-agree-lbl">
           <input type="radio" name="dpAnswer" value="agree" onchange="toggleDPField()" style="accent-color:#1a1a1a;width:15px;height:15px" /> Agree
@@ -269,6 +259,7 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
           <input type="radio" name="dpAnswer" value="amend" onchange="toggleDPField()" style="accent-color:#1a1a1a;width:15px;height:15px" /> Suggest amendments
         </label>
       </div>
+      <div id="dpValidationMsg" class="hidden" style="margin-top:8px;font-size:13px;color:#a32d2d">Please select an option to continue.</div>
       <div id="dpTextField" class="hidden" style="margin-top:12px">
         <label class="field-label">Your suggested amendments</label>
         <textarea id="dpAmendment" rows="4" placeholder="Describe how the decision problem statement should be improved..."></textarea>
@@ -277,7 +268,7 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
 
     <div class="footer">
       <button class="btn" onclick="nav('intro')">&#8592; Back</button>
-      <button class="btn btn-primary" onclick="nav('case-intro-0')">Next &#8594;</button>
+      <button class="btn btn-primary" onclick="navDP()">Next &#8594;</button>
     </div>
   </div>
 
@@ -285,24 +276,10 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
        CASE INTRO screens (one per case)
   ══════════════════════════════════════════ -->
   <div id="step-case-intro-0" class="card hidden">
-    <div class="case-intro-eyebrow">Procurement case 1 of 3</div>
-    <div class="case-intro-title">Amlodipine</div>
-    <p class="case-intro-sub">Please review the following case details before proceeding to the questionnaire for this procurement case.</p>
-    <div class="case-detail-grid">
-      <div class="case-detail"><div class="case-detail-lbl">Drug name</div><div class="case-detail-val">Amlodipine Besylate</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Drug class</div><div class="case-detail-val">Calcium Channel Blocker (CCB)</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Indication</div><div class="case-detail-val">Hypertension and chronic stable angina</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Dosage form &amp; strength</div><div class="case-detail-val">Tablet, 5 mg and 10 mg</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Patent status</div><div class="case-detail-val">Off-patent — multiple generic manufacturers</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Procurement context</div><div class="case-detail-val">Annual tender process, MOHE facilities</div></div>
-      <div class="case-detail full"><div class="case-detail-lbl">Relevant considerations</div><div class="case-detail-val"><ul>
-        <li>High-volume medication with significant budget impact across MOHE facilities</li>
-        <li>Multiple off-patent alternatives available in the Malaysian market</li>
-        <li>Bioequivalence and interchangeability are key evaluation factors</li>
-        <li>Decision involves both clinical and procurement stakeholders</li>
-      </ul></div></div>
-    </div>
-    <div class="case-notice"><div class="case-notice-i">i</div><p>The questions in the following section apply specifically to this procurement case. Please evaluate each question in the context of Amlodipine procurement at MOHE facilities.</p></div>
+    <div class="case-intro-eyebrow" style="color:var(--text);font-weight:600">Procurement case I of III</div>
+    <div class="case-intro-title">💊 Gliclazide</div>
+    <div class="q-label" style="margin-top:1rem;margin-bottom:6px">Case details</div>
+    <div style="font-size:14px;color:var(--text2);line-height:1.8;background:var(--bg2);border-radius:var(--radius);padding:14px 16px;margin-bottom:1.25rem">Gliclazide is a second-generation sulfonylurea used primarily in the management of Type 2 Diabetes Mellitus (T2DM). It is distinguished within its class by its partial selectivity for pancreatic sulfonylurea receptors and its perceived cardiovascular safety profile. This drug was shown to have high utilization and expenditure and are a drug used in diabetes, the top 2 utilised therapeutic subgroup in 219-2022.</div>
     <div class="footer">
       <button class="btn" onclick="nav('decision')">&#8592; Back</button>
       <button class="btn btn-primary" onclick="startCase(0)">Proceed to case questions &#8594;</button>
@@ -310,24 +287,10 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
   </div>
 
   <div id="step-case-intro-1" class="card hidden">
-    <div class="case-intro-eyebrow">Procurement case 2 of 3</div>
-    <div class="case-intro-title">Metformin</div>
-    <p class="case-intro-sub">Please review the following case details before proceeding to the questionnaire for this procurement case.</p>
-    <div class="case-detail-grid">
-      <div class="case-detail"><div class="case-detail-lbl">Drug name</div><div class="case-detail-val">Metformin Hydrochloride</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Drug class</div><div class="case-detail-val">Biguanide — Oral Antidiabetic</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Indication</div><div class="case-detail-val">Type 2 diabetes mellitus, first-line pharmacotherapy</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Dosage form &amp; strength</div><div class="case-detail-val">Tablet, 500 mg and 850 mg</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Patent status</div><div class="case-detail-val">Off-patent — widely available across multiple generic manufacturers</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Procurement context</div><div class="case-detail-val">Annual tender process, MOHE facilities</div></div>
-      <div class="case-detail full"><div class="case-detail-lbl">Relevant considerations</div><div class="case-detail-val"><ul>
-        <li>One of the highest-volume oral antidiabetic agents procured across MOHE facilities</li>
-        <li>Large number of registered generic alternatives in the Malaysian market</li>
-        <li>Gastrointestinal tolerability and excipient profile are key differentiators between generics</li>
-        <li>Extended-release formulations exist alongside immediate-release — formulation match is critical</li>
-      </ul></div></div>
-    </div>
-    <div class="case-notice"><div class="case-notice-i">i</div><p>The questions in the following section apply specifically to this procurement case. Please evaluate each question in the context of Metformin procurement at MOHE facilities.</p></div>
+    <div class="case-intro-eyebrow" style="color:var(--text);font-weight:600">Procurement case II of III</div>
+    <div class="case-intro-title">💊 Metformin</div>
+    <div class="q-label" style="margin-top:1rem;margin-bottom:6px">Case details</div>
+    <div style="font-size:14px;color:var(--text2);line-height:1.8;background:var(--bg2);border-radius:var(--radius);padding:14px 16px;margin-bottom:1.25rem">Metformin Hydrochloride is a biguanide oral antidiabetic agent and the first-line pharmacotherapy for Type 2 Diabetes Mellitus (T2DM). It is one of the highest-volume medications procured across MOHE facilities, with a large number of registered generic alternatives in the Malaysian market. Gastrointestinal tolerability and excipient profile are key differentiators between generics, and formulation type — immediate-release versus extended-release — must be carefully matched during procurement.</div>
     <div class="footer">
       <button class="btn" onclick="nav('case-q5-0')">&#8592; Back</button>
       <button class="btn btn-primary" onclick="startCase(1)">Proceed to case questions &#8594;</button>
@@ -335,24 +298,10 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
   </div>
 
   <div id="step-case-intro-2" class="card hidden">
-    <div class="case-intro-eyebrow">Procurement case 3 of 3</div>
-    <div class="case-intro-title">Atorvastatin</div>
-    <p class="case-intro-sub">Please review the following case details before proceeding to the questionnaire for this procurement case.</p>
-    <div class="case-detail-grid">
-      <div class="case-detail"><div class="case-detail-lbl">Drug name</div><div class="case-detail-val">Atorvastatin Calcium</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Drug class</div><div class="case-detail-val">HMG-CoA Reductase Inhibitor (Statin)</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Indication</div><div class="case-detail-val">Primary hyperlipidaemia and mixed dyslipidaemia; cardiovascular risk reduction</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Dosage form &amp; strength</div><div class="case-detail-val">Tablet, 10 mg, 20 mg and 40 mg</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Patent status</div><div class="case-detail-val">Off-patent — multiple generic manufacturers in the local market</div></div>
-      <div class="case-detail"><div class="case-detail-lbl">Procurement context</div><div class="case-detail-val">Annual tender process, MOHE facilities</div></div>
-      <div class="case-detail full"><div class="case-detail-lbl">Relevant considerations</div><div class="case-detail-val"><ul>
-        <li>High-volume statin with significant long-term cardiovascular impact across the patient population</li>
-        <li>Multiple generic alternatives registered; variability in bioequivalence data quality between manufacturers</li>
-        <li>Stability and storage conditions are important given the lipophilic nature of the compound</li>
-        <li>Patient adherence is a key outcome driver — packaging and patient information quality matter</li>
-      </ul></div></div>
-    </div>
-    <div class="case-notice"><div class="case-notice-i">i</div><p>The questions in the following section apply specifically to this procurement case. Please evaluate each question in the context of Atorvastatin procurement at MOHE facilities.</p></div>
+    <div class="case-intro-eyebrow" style="color:var(--text);font-weight:600">Procurement case III of III</div>
+    <div class="case-intro-title">💊 Atorvastatin</div>
+    <div class="q-label" style="margin-top:1rem;margin-bottom:6px">Case details</div>
+    <div style="font-size:14px;color:var(--text2);line-height:1.8;background:var(--bg2);border-radius:var(--radius);padding:14px 16px;margin-bottom:1.25rem">Atorvastatin Calcium is an HMG-CoA reductase inhibitor (statin) indicated for primary hyperlipidaemia, mixed dyslipidaemia, and cardiovascular risk reduction. It is a high-volume medication with significant long-term cardiovascular impact across the patient population. Multiple generic alternatives are registered in the Malaysian market, with variability in bioequivalence data quality between manufacturers. Stability, storage conditions, and packaging quality are important considerations given the lipophilic nature of the compound and its role in long-term adherence.</div>
     <div class="footer">
       <button class="btn" onclick="nav('case-q5-1')">&#8592; Back</button>
       <button class="btn btn-primary" onclick="startCase(2)">Proceed to case questions &#8594;</button>
@@ -363,18 +312,21 @@ input[type=checkbox] { width:15px; height:15px; accent-color:#1a1a1a; cursor:poi
        CASE QUESTION SCREENS (rendered by JS)
        IDs: step-case-q1-{caseIdx} through step-case-q5-{caseIdx}
   ══════════════════════════════════════════ -->
+  <div id="step-case-q0-0" class="card hidden"></div>
   <div id="step-case-q1-0" class="card hidden"></div>
   <div id="step-case-q2-0" class="card hidden"></div>
   <div id="step-case-q3-0" class="card hidden"></div>
   <div id="step-case-q4-0" class="card hidden"></div>
   <div id="step-case-q5-0" class="card hidden"></div>
 
+  <div id="step-case-q0-1" class="card hidden"></div>
   <div id="step-case-q1-1" class="card hidden"></div>
   <div id="step-case-q2-1" class="card hidden"></div>
   <div id="step-case-q3-1" class="card hidden"></div>
   <div id="step-case-q4-1" class="card hidden"></div>
   <div id="step-case-q5-1" class="card hidden"></div>
 
+  <div id="step-case-q0-2" class="card hidden"></div>
   <div id="step-case-q1-2" class="card hidden"></div>
   <div id="step-case-q2-2" class="card hidden"></div>
   <div id="step-case-q3-2" class="card hidden"></div>
@@ -408,27 +360,31 @@ const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbyufq2Dvl888nAFK_R
 //  CASE DEFINITIONS
 // ─────────────────────────────────────────────────────────────
 const CASES = [
-  { id:0, name:'Amlodipine',   label:'Procurement case 1',
-    summary:'Evaluation of off-patent Amlodipine alternatives for tender procurement at MOHE facilities, assessing both technical and financial performance to achieve highest value-for-money.' },
-  { id:1, name:'Metformin',    label:'Procurement case 2',
+  { id:0, name:'Gliclazide',   label:'Procurement case I',
+    summary:'Evaluation of off-patent Gliclazide alternatives for tender procurement at MOHE facilities, assessing both technical and financial performance to achieve highest value-for-money.' },
+  { id:1, name:'Metformin',    label:'Procurement case II',
     summary:'Evaluation of off-patent Metformin alternatives for tender procurement at MOHE facilities, assessing both technical and financial performance to achieve highest value-for-money.' },
-  { id:2, name:'Atorvastatin', label:'Procurement case 3',
+  { id:2, name:'Atorvastatin', label:'Procurement case III',
     summary:'Evaluation of off-patent Atorvastatin alternatives for tender procurement at MOHE facilities, assessing both technical and financial performance to achieve highest value-for-money.' }
 ];
 
 // ─────────────────────────────────────────────────────────────
-//  CASE CONTEXT BANNER — shown at top of every Q1–Q5 screen
+//  CASE CONTEXT BANNER — shown at top of every question screen
 // ─────────────────────────────────────────────────────────────
 function caseHeader(ci) {
   const c = CASES[ci];
-  return `<div style="display:flex;align-items:flex-start;gap:12px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:1.25rem">
-    <div style="flex:1">
-      <div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">${c.label}</div>
-      <div style="font-size:16px;font-weight:500;color:var(--text);margin-bottom:5px">${c.name}</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6">${c.summary}</div>
-    </div>
-  </div>`;}
-
+  const descriptions = [
+    'Gliclazide is a second-generation sulfonylurea used primarily in the management of Type 2 Diabetes Mellitus (T2DM). It is distinguished within its class by its partial selectivity for pancreatic sulfonylurea receptors and its perceived cardiovascular safety profile. This drug was shown to have high utilization and expenditure and are a drug used in diabetes, the top 2 utilised therapeutic subgroup in 219-2022.',
+    'Metformin Hydrochloride is a biguanide oral antidiabetic agent and the first-line pharmacotherapy for Type 2 Diabetes Mellitus (T2DM). It is one of the highest-volume medications procured across MOHE facilities, with a large number of registered generic alternatives in the Malaysian market.',
+    'Atorvastatin Calcium is an HMG-CoA reductase inhibitor (statin) indicated for primary hyperlipidaemia, mixed dyslipidaemia, and cardiovascular risk reduction. It is a high-volume medication with significant long-term cardiovascular impact across the patient population.'
+  ];
+  return `<div style="background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1.25rem">
+    <div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">${c.label}</div>
+    <div style="font-size:18px;font-weight:500;color:var(--text);margin-bottom:8px">💊 ${c.name}</div>
+    <div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Case details</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.7">${descriptions[ci]}</div>
+  </div>`;
+}
 // ─────────────────────────────────────────────────────────────
 //  CRITERIA DATA
 // ─────────────────────────────────────────────────────────────
@@ -529,38 +485,38 @@ const STEP_CONFIG = [
   { id:'details',       lbl:'Your details' },
   { id:'intro',         lbl:'Introduction' },
   { id:'decision',      lbl:'Decision problem' },
-  { id:'case-intro-0',  lbl:'Case 1 intro' },
-  { id:'case-q1-0',     lbl:'Case 1 — Q1' },
-  { id:'case-q2-0',     lbl:'Case 1 — Q2' },
-  { id:'case-q3-0',     lbl:'Case 1 — Q3' },
-  { id:'case-q4-0',     lbl:'Case 1 — Q4' },
-  { id:'case-q5-0',     lbl:'Case 1 — Q5' },
-  { id:'case-intro-1',  lbl:'Case 2 intro' },
-  { id:'case-q1-1',     lbl:'Case 2 — Q1' },
-  { id:'case-q2-1',     lbl:'Case 2 — Q2' },
-  { id:'case-q3-1',     lbl:'Case 2 — Q3' },
-  { id:'case-q4-1',     lbl:'Case 2 — Q4' },
-  { id:'case-q5-1',     lbl:'Case 2 — Q5' },
-  { id:'case-intro-2',  lbl:'Case 3 intro' },
-  { id:'case-q1-2',     lbl:'Case 3 — Q1' },
-  { id:'case-q2-2',     lbl:'Case 3 — Q2' },
-  { id:'case-q3-2',     lbl:'Case 3 — Q3' },
-  { id:'case-q4-2',     lbl:'Case 3 — Q4' },
-  { id:'case-q5-2',     lbl:'Case 3 — Q5' },
+  { id:'case-intro-0',  lbl:'Case I intro' },
+  { id:'case-q1-0',     lbl:'Case I — Q1' },
+  { id:'case-q2-0',     lbl:'Case I — Q2' },
+  { id:'case-q3-0',     lbl:'Case I — Q3' },
+  { id:'case-q4-0',     lbl:'Case I — Q4' },
+  { id:'case-q5-0',     lbl:'Case I — Q5' },
+  { id:'case-intro-1',  lbl:'Case II intro' },
+  { id:'case-q1-1',     lbl:'Case II — Q1' },
+  { id:'case-q2-1',     lbl:'Case II — Q2' },
+  { id:'case-q3-1',     lbl:'Case II — Q3' },
+  { id:'case-q4-1',     lbl:'Case II — Q4' },
+  { id:'case-q5-1',     lbl:'Case II — Q5' },
+  { id:'case-intro-2',  lbl:'Case III intro' },
+  { id:'case-q1-2',     lbl:'Case III — Q1' },
+  { id:'case-q2-2',     lbl:'Case III — Q2' },
+  { id:'case-q3-2',     lbl:'Case III — Q3' },
+  { id:'case-q4-2',     lbl:'Case III — Q4' },
+  { id:'case-q5-2',     lbl:'Case III — Q5' },
   { id:'done',          lbl:'Done' }
 ];
 
 // Build stepper dots once
 function buildStepper() {
   const container = document.getElementById('progressSteps');
-  // We show a simplified 7-node stepper: Details | Intro | Decision | Case1 | Case2 | Case3 | Done
+  // We show a simplified 7-node stepper: Details | Intro | Decision | Case I | Case II | Case III | Done
   const nodes = [
     { lbl:'Details' },
     { lbl:'Introduction' },
     { lbl:'Decision problem' },
-    { lbl:'Case 1' },
-    { lbl:'Case 2' },
-    { lbl:'Case 3' },
+    { lbl:'Case I' },
+    { lbl:'Case II' },
+    { lbl:'Case III' },
     { lbl:'Done' }
   ];
   container.innerHTML = nodes.map((n, i) => {
@@ -603,10 +559,15 @@ let currentStep = 'details';
 function nav(stepId) {
   // Validate details step before leaving
   if (currentStep === 'details' && stepId !== 'details') {
-    if (!document.getElementById('partName').value.trim() || !document.getElementById('partRole').value.trim()) {
-      alert('Please enter your full name and designation before proceeding.');
+    const name = document.getElementById('partName').value.trim();
+    const role = document.getElementById('partRole').value.trim();
+    const dept = document.getElementById('partDept').value.trim();
+    const exp  = document.getElementById('partExp').value.trim();
+    if (!name || !role || !dept || !exp) {
+      document.getElementById('detailsValidationMsg').classList.remove('hidden');
       return;
     }
+    document.getElementById('detailsValidationMsg').classList.add('hidden');
   }
   // Hide all
   document.querySelectorAll('[id^="step-"]').forEach(el => el.classList.add('hidden'));
@@ -624,6 +585,17 @@ function nav(stepId) {
 function toggleDPField() {
   const val = document.querySelector('input[name=dpAnswer]:checked')?.value;
   document.getElementById('dpTextField').classList.toggle('hidden', val !== 'amend');
+  document.getElementById('dpValidationMsg').classList.add('hidden');
+}
+
+function navDP() {
+  const val = document.querySelector('input[name=dpAnswer]:checked')?.value;
+  if (!val) {
+    document.getElementById('dpValidationMsg').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('dpValidationMsg').classList.add('hidden');
+  nav('case-intro-0');
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -631,8 +603,6 @@ function toggleDPField() {
 // ─────────────────────────────────────────────────────────────
 function startCase(caseIdx) {
   currentCase = caseIdx;
-  const st = caseState[caseIdx];
-  // Reset selected/flagged for this case if starting fresh
   buildCaseQ1(caseIdx);
   buildCaseQ2(caseIdx);
   buildCaseQ4(caseIdx);
@@ -647,62 +617,94 @@ function caseIntroBack(caseIdx) {
 }
 
 // ─────────────────────────────────────────────────────────────
-//  Q1 — Criteria selection
+//  Q1 — Unified criteria classification (wajib / am / not important)
 // ─────────────────────────────────────────────────────────────
 function buildCaseQ1(ci) {
-  const st  = caseState[ci];
-  const el  = document.getElementById('step-case-q1-' + ci);
-  let tableBody = '';
-  CRITERIA.forEach((c, i) => {
-    const checked = st.selected.some(s => s.name === c.name);
-    tableBody += `<tr id="q1row-${ci}-${i}" class="${checked?'selected':''}" style="cursor:pointer" onclick="toggleQ1(${ci},${i})">
-      <td onclick="event.stopPropagation()"><input type="checkbox" id="q1chk-${ci}-${i}" ${checked?'checked':''} onchange="toggleQ1(${ci},${i})" /></td>
-      <td><div class="crit-name">${c.name}</div></td>
-      <td><div class="crit-desc">${c.desc}</div></td>
-    </tr>`;
-  });
-
+  const st = caseState[ci];
+  const el = document.getElementById('step-case-q1-' + ci);
   const backTarget = ci === 0 ? 'case-intro-0' : 'case-intro-' + ci;
+  const cn = ['I','II','III'][ci];
+  if (!st.classifications) st.classifications = {};
+
+  const cards = CRITERIA.map((c, i) => {
+    const saved = st.classifications[c.name] || '';
+    return `<div class="crit-card" id="ccard-${ci}-${i}" style="align-items:center;gap:14px">
+      <select id="csel-${ci}-${i}" onchange="classifyCrit(${ci},${i})"
+        style="width:136px;flex-shrink:0;padding:8px 6px;font-size:13px;font-family:inherit;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:${saved?'var(--text)':'var(--text3)'};cursor:pointer;outline:none">
+        <option value="" ${saved===''?'selected':''}>Not important</option>
+        <option value="wajib" ${saved==='wajib'?'selected':''}>Wajib</option>
+        <option value="am" ${saved==='am'?'selected':''}>Am</option>
+      </select>
+      <div class="crit-card-body">
+        <div class="crit-card-name">${c.name}</div>
+        <div class="crit-card-desc">${c.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const n = Object.values(st.classifications).filter(v => v !== '').length;
 
   el.innerHTML = `
     ${caseHeader(ci)}
-    <div class="q-label">Case ${ci+1} — Question 1 of 5</div>
-    <div class="q-title">Select which criterions listed below must be considered in the evaluation of a tender bid to ensure the drug provides the highest value</div>
-    <p class="hint">Select all criteria that must be considered for <strong>${CASES[ci].name}</strong>. At least one selection is required to proceed.</p>
-    <table><thead><tr><th></th><th>Criteria</th><th>Description</th></tr></thead><tbody id="q1body-${ci}">${tableBody}</tbody></table>
+    <div class="q-label">Case ${cn} — Question 1 of 5</div>
+    <div class="q-title">Considering the specific details of Procurement Case ${cn}, classify each criterion below according to its importance in the evaluation of a tender bid — <em>spesifikasi wajib</em>, <em>spesifikasi am</em> or not important.</div>
+    <p class="hint">Use the dropdown on the left of each criterion to classify it. At least one classification is required to proceed.</p>
+    <div>${cards}</div>
+    <div style="margin-top:1.5rem">
+      <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px">If there are critical criteria to be considered that are not included in this list, add them below</div>
+      <textarea id="q1extra-${ci}" rows="3" placeholder="Add any additional criteria not listed above...">${st.extraCriteria||''}</textarea>
+    </div>
     <div class="footer">
-      <span class="sel-count" id="q1count-${ci}">${st.selected.length} criteri${st.selected.length===1?'on':'a'} selected</span>
+      <span class="sel-count" id="q1count-${ci}">${n} criteri${n===1?'on':'a'} classified</span>
       <div style="display:flex;gap:8px">
         <button class="btn" onclick="nav('${backTarget}')">&#8592; Back</button>
-        <button class="btn btn-primary" id="q1next-${ci}" onclick="proceedQ1(${ci})" ${st.selected.length===0?'disabled':''}>Next &#8594;</button>
+        <button class="btn btn-primary" id="q1next-${ci}" onclick="proceedQ1(${ci})" ${n===0?'disabled':''}>Next &#8594;</button>
       </div>
     </div>`;
 }
 
-function toggleQ1(ci, i) {
-  const chk = document.getElementById(`q1chk-${ci}-${i}`);
-  const row = document.getElementById(`q1row-${ci}-${i}`);
-  if (!chk) return;
-  // When called from row click, manually flip the checkbox
-  // When called from checkbox onchange, checkbox is already in new state
-  const isNowChecked = !chk.checked;
-  chk.checked = isNowChecked;
-  row.classList.toggle('selected', isNowChecked);
-  const st = caseState[ci];
-  const c  = CRITERIA[i];
-  if (isNowChecked) { if (!st.selected.some(s=>s.name===c.name)) st.selected.push({...c, proposedDef:'', perfFlagged:false, perfRefinement:''}); }
-  else { st.selected = st.selected.filter(s => s.name !== c.name); }
-  const n = st.selected.length;
-  document.getElementById('q1count-' + ci).textContent = n + ' criteri' + (n===1?'on':'a') + ' selected';
-  document.getElementById('q1next-'  + ci).disabled = n === 0;
+function classifyCrit(ci, i) {
+  const sel = document.getElementById(`csel-${ci}-${i}`);
+  if (!sel) return;
+  const val = sel.value;
+  const st  = caseState[ci];
+  if (!st.classifications) st.classifications = {};
+  const c = CRITERIA[i];
+  st.classifications[c.name] = val;
+  // Update dropdown colour
+  sel.style.color = val ? 'var(--text)' : 'var(--text3)';
+  // Keep st.selected in sync — 'am' classified items go to Q2 onwards
+  if (val === 'am') {
+    if (!st.selected.some(s => s.name === c.name))
+      st.selected.push({...c, proposedDef:'', perfFlagged:false, perfRefinement:''});
+  } else {
+    st.selected = st.selected.filter(s => s.name !== c.name);
+  }
+  const n = Object.values(st.classifications).filter(v => v !== '').length;
+  const countEl = document.getElementById('q1count-' + ci);
+  const nextEl  = document.getElementById('q1next-'  + ci);
+  if (countEl) countEl.textContent = n + ' criteri' + (n===1?'on':'a') + ' classified';
+  if (nextEl)  nextEl.disabled = n === 0;
 }
 
 function proceedQ1(ci) {
   const st = caseState[ci];
-  if (!st.selected.length) return;
+  const n  = Object.values(st.classifications || {}).filter(v => v !== '').length;
+  if (!n) return;
+  const extra = document.getElementById('q1extra-' + ci);
+  if (extra) st.extraCriteria = extra.value.trim();
+  // Q2 onwards only shows 'am' criteria
+  st.selected = CRITERIA
+    .filter(c => (st.classifications[c.name] || '') === 'am')
+    .map(c => ({...c,
+      proposedDef: st.selected.find(s => s.name === c.name)?.proposedDef || '',
+      perfFlagged: false, perfRefinement: ''
+    }));
   buildCaseQ2(ci);
   nav('case-q2-' + ci);
 }
+
+
 
 // ─────────────────────────────────────────────────────────────
 //  Q2 — Definition evaluation
@@ -710,26 +712,29 @@ function proceedQ1(ci) {
 function buildCaseQ2(ci) {
   const st = caseState[ci];
   const el = document.getElementById('step-case-q2-' + ci);
+
+  const emptyMsg = !st.selected.length
+    ? `<div style="background:var(--amber-bg);border:0.5px solid rgba(186,117,23,.3);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--amber-text);line-height:1.6;margin-bottom:1rem">You have not selected any criteria to be <em>spesifikasi am</em> in Question 1. Click Next to proceed, or go back to classify criteria.</div>`
+    : '';
+
   const items = st.selected.map((c, i) => `
-    <div class="review-item">
-      <div class="review-item-header">
-        <div class="review-item-counter">Criteria ${i+1} of ${st.selected.length}</div>
-        <div class="review-item-name">${c.name}<span class="cat-badge cat-${c.cat}">${c.cat}</span></div>
-        <div class="review-sub-lbl">Current definition</div>
-        <div class="review-text-box">${c.desc}</div>
+    <div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:10px;padding:0;overflow:hidden">
+      <div style="width:100%;padding:10px 14px;background:var(--bg2);border-bottom:0.5px solid var(--border)">
+        <div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Criteria ${i+1} of ${st.selected.length}</div>
+        <div class="crit-card-name">${c.name}</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:4px">${c.desc}</div>
       </div>
-      <div class="review-item-body">
-        <div class="review-proposed-lbl">Your proposed refinement <span class="review-optional">— optional, leave blank if you agree</span></div>
-        <textarea id="q2ta-${ci}-${i}" rows="4" placeholder="Suggest any changes, additions, or corrections to improve accuracy...">${c.proposedDef||''}</textarea>
+      <div style="width:100%;padding:10px 14px;background:var(--amber-bg)">
+        <div style="font-size:11px;font-weight:500;color:var(--amber-text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Your proposed refinement <span style="font-weight:400;opacity:.75">— optional</span></div>
+        <textarea id="q2ta-${ci}-${i}" rows="4" placeholder="Suggest any changes, additions, or corrections to improve accuracy..." style="width:100%;background:var(--bg);border-color:rgba(186,117,23,.3)">${c.proposedDef||''}</textarea>
       </div>
     </div>`).join('');
 
   el.innerHTML = `
     ${caseHeader(ci)}
-    <div class="q-label">Case ${ci+1} — Question 2 of 5</div>
+    <div class="q-label">Case ${['I','II','III'][ci]} — Question 2 of 5</div>
     <div class="q-title">Evaluate the definition for accuracy and propose refinements as you deem necessary</div>
-    <p class="hint">Review each definition carefully and propose any refinements below. Leave a box blank if you are satisfied with the current definition.</p>
-    ${items}
+    ${emptyMsg}${items}
     <div class="footer">
       <span style="font-size:13px;color:var(--text2)">${st.selected.length} criteri${st.selected.length===1?'on':'a'} to review</span>
       <div style="display:flex;gap:8px">
@@ -764,11 +769,16 @@ function buildCaseQ3(ci) {
       </div>
     </li>`).join('');
 
+  const emptyMsgQ3 = !st.selected.length
+    ? `<div style="background:var(--amber-bg);border:0.5px solid rgba(186,117,23,.3);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--amber-text);line-height:1.6;margin-bottom:1rem">You have not selected any criteria to be <em>spesifikasi am</em> in Question 1. Click Next to proceed, or go back to classify criteria.</div>`
+    : '';
+
   el.innerHTML = `
     ${caseHeader(ci)}
-    <div class="q-label">Case ${ci+1} — Question 3 of 5</div>
-    <div class="q-title">Rank the criteria previously selected, from most to least important</div>
+    <div class="q-label">Case ${['I','II','III'][ci]} — Question 3 of 5</div>
+    <div class="q-title">Rank the <em>spesifikasi am</em> criteria previously selected, from most to least important</div>
     <p class="hint">Drag and drop to reorder — most important at the top (rank 1), least important at the bottom.</p>
+    ${emptyMsgQ3}
     <ul class="rank-list" id="ranklist-${ci}">${items}</ul>
     <div class="footer">
       <button class="btn" onclick="proceedQ2back(${ci})">&#8592; Back</button>
@@ -805,20 +815,28 @@ function buildCaseQ4(ci) {
     const levels  = `<ul class="perf-levels-list">${(c.perfLevels||[]).map(l=>`<li><span class="perf-level-num">${l.num}—</span>${l.text}</li>`).join('')}</ul>`;
     tableBody += `<tr id="q4row-${ci}-${i}" class="${checked?'flagged':''}" style="cursor:pointer" onclick="toggleQ4(${ci},${i})">
       <td onclick="event.stopPropagation()"><input type="checkbox" id="q4chk-${ci}-${i}" ${checked?'checked':''} onchange="toggleQ4(${ci},${i})" /></td>
-      <td><div class="crit-name">${c.name}</div><div style="margin-top:3px"><span class="cat-badge cat-${c.cat}">${c.cat}</span></div></td>
-      <td><div class="crit-desc">${c.desc}</div></td>
+      <td>
+        <div class="crit-card-name">${c.name}</div>
+        <div class="crit-card-desc" style="margin-top:4px">${c.desc}</div>
+      </td>
       <td>${levels}</td>
     </tr>`;
   });
 
+  const emptyMsgQ4Text = 'You have not selected any criteria to be <em>spesifikasi am</em> in Question 1. Click Next to proceed, or go back to classify criteria.';
+
   el.innerHTML = `
     ${caseHeader(ci)}
-    <div class="q-label">Case ${ci+1} — Question 4 of 5</div>
+    <div class="q-label">Case ${['I','II','III'][ci]} — Question 4 of 5</div>
     <div class="q-title">For every selected criterion stated above, are the suggested performance units consistent with current practice standards? If not, suggest how it can be improved.</div>
     <p class="hint">Review the performance levels for each criterion. Tick any criterion whose performance units need improvement — flagged items will appear in the next step for you to propose refinements.</p>
     <table class="perf-table">
-      <thead><tr><th></th><th>Criteria</th><th>Description</th><th>Performances (Levels)</th></tr></thead>
-      <tbody>${tableBody}</tbody>
+      <thead><tr><th style="width:40px;text-align:center"></th><th style="width:45%">Criteria &amp; Description</th><th>Performances (Levels)</th></tr></thead>
+      <tbody>
+        ${!st.selected.length
+          ? `<tr><td colspan="3"><div style="background:var(--amber-bg);border:0.5px solid rgba(186,117,23,.3);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--amber-text);line-height:1.6;margin:8px 0">${emptyMsgQ4Text}</div></td></tr>`
+          : tableBody}
+      </tbody>
     </table>
     <div class="footer">
       <span style="font-size:13px;color:var(--text2)">Tick criteria whose performance units need improvement</span>
@@ -864,29 +882,30 @@ function buildCaseQ5(ci) {
     content = st.flagged.map((c, i) => {
       const levels = `<ul class="perf-levels-list">${(c.perfLevels||[]).map(l=>`<li><span class="perf-level-num">${l.num}—</span>${l.text}</li>`).join('')}</ul>`;
       return `
-      <div class="review-item">
-        <div class="review-item-header">
-          <div class="review-item-counter">Criteria ${i+1} of ${st.flagged.length}</div>
-          <div class="review-item-name">${c.name}<span class="cat-badge cat-${c.cat}">${c.cat}</span></div>
-          <div class="review-sub-lbl">Current definition</div>
-          <div class="review-text-box" style="margin-bottom:10px">${c.desc}</div>
-          <div class="review-sub-lbl">Current performance levels</div>
-          <div class="review-text-box">${levels}</div>
+      <div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:10px;padding:0;overflow:hidden">
+        <div style="width:100%;padding:10px 14px;background:var(--bg2);border-bottom:0.5px solid var(--border)">
+          <div style="font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Criteria ${i+1} of ${st.flagged.length}</div>
+          <div class="crit-card-name">${c.name}</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:4px">${c.desc}</div>
         </div>
-        <div class="review-item-body">
-          <div class="review-proposed-lbl">Your proposed refinement to the performance levels <span class="review-optional">— describe what should be changed, added, or removed</span></div>
-          <textarea id="q5ta-${ci}-${i}" rows="5" placeholder="Propose improved performance level descriptions, thresholds, or additional levels as appropriate...">${c.perfRefinement||''}</textarea>
+        <div style="width:100%;padding:10px 14px;background:var(--green-bg);border-bottom:0.5px solid var(--border)">
+          <div style="font-size:11px;font-weight:500;color:var(--green-text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Current performance levels</div>
+          <ul class="perf-levels-list" style="color:var(--green-text)">${(c.perfLevels||[]).map(l=>`<li style="border-color:rgba(39,80,10,.15)"><span class="perf-level-num" style="color:var(--green-text)">${l.num}—</span>${l.text}</li>`).join('')}</ul>
+        </div>
+        <div style="width:100%;padding:10px 14px;background:var(--amber-bg)">
+          <div style="font-size:11px;font-weight:500;color:var(--amber-text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Your proposed refinement <span style="font-weight:400;opacity:.75">— optional</span></div>
+          <textarea id="q5ta-${ci}-${i}" rows="5" placeholder="Propose improved performance level descriptions, thresholds, or additional levels as appropriate..." style="width:100%;background:var(--bg);border-color:rgba(186,117,23,.3)">${c.perfRefinement||''}</textarea>
         </div>
       </div>`;
     }).join('');
   }
 
-  const nextLabel  = isLastCase ? 'Submit &#8594;' : `Proceed to case ${ci+2} &#8594;`;
+  const nextLabel  = isLastCase ? 'Submit &#8594;' : `Proceed to case ${['I','II','III'][ci+1]} &#8594;`;
   const nextAction = isLastCase ? `submitForm()` : `proceedToNextCase(${ci})`;
 
   el.innerHTML = `
     ${caseHeader(ci)}
-    <div class="q-label">Case ${ci+1} — Question 5 of 5</div>
+    <div class="q-label">Case ${['I','II','III'][ci]} — Question 5 of 5</div>
     <div class="q-title">Propose refinements for performance levels as you deem necessary</div>
     <p class="hint">For each criterion flagged in the previous step, propose your suggested improvements below.</p>
     ${content}
