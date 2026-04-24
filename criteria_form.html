@@ -524,7 +524,7 @@ function resetFont()      { applyFont(FONT_DEFAULT); }
 //  FORM VERSION
 // ─────────────────────────────────────────────────────────────
 const FORM_VERSION = '2.0';
-const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbxYpEFbAQYoXDuE2uDqQrqnLUKATQX8mwJ8QEaUzluKbECH88LffgWJu3uoKbp3bhg/exec';
+const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbzapl17Ppn22E8MHkjJZ6YmDBZhUg3Igrwv2Bng3iNuTdPuMCnnRTkM2PMI-ZgWvWk/exec';
 
 // ─────────────────────────────────────────────────────────────
 //  CASE DEFINITIONS
@@ -1629,14 +1629,18 @@ async function submitForm() {
   const submitBtn = document.querySelector('#step-case-q4-2 .btn-primary');
   if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting...'; }
 
+  window._participantId = null;
   try {
     if (BACKEND_URL) {
-      await fetch(BACKEND_URL, {
+      const resp = await fetch(BACKEND_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(row),
         mode: 'no-cors'
       });
+      // no-cors means we can't read the response body for participantId
+      // We store a local fallback using timestamp instead
+      window._participantId = Date.now();
     }
   } catch(err) { console.warn('Backend error:', err); }
 
@@ -1720,23 +1724,24 @@ async function sendEmailCopy() {
   try {
     if (!BACKEND_URL) throw new Error('No backend URL configured.');
 
-    const payload = {
-      type:       'email_copy',
-      email:      email,
-      submission: window._lastSubmission || {}
-    };
-
-    await fetch(BACKEND_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      mode: 'no-cors'
+    // Use email_request — Apps Script retrieves data from Sheet by participantId
+    // Send as GET request with URL params to avoid no-cors body issue
+    const params = new URLSearchParams({
+      type:          'email_request',
+      email:         email,
+      participantId: window._participantId || '',
+      name:          (window._lastSubmission || {}).name || ''
     });
 
-    // no-cors means we can't read the response — assume success
+    await fetch(BACKEND_URL + '?' + params.toString(), {
+      method: 'GET',
+      mode:   'no-cors'
+    });
+
+    // Assume success after 3 seconds (no-cors blocks response reading)
+    await new Promise(r => setTimeout(r, 3000));
     document.getElementById('emailSendingMsg').classList.add('hidden');
     document.getElementById('emailSuccessMsg').classList.remove('hidden');
-    // Hide the whole send section after success
     document.getElementById('emailCopySection').classList.add('hidden');
 
   } catch (err) {
@@ -1744,7 +1749,6 @@ async function sendEmailCopy() {
     const errMsg = document.getElementById('emailErrorMsg');
     errMsg.textContent = 'Sorry, something went wrong. Please try again or contact the research team.';
     errMsg.classList.remove('hidden');
-    // Show the button again so they can retry
     document.getElementById('sendCopyBtn').classList.remove('hidden');
   }
 }
