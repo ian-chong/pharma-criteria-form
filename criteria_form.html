@@ -119,7 +119,6 @@ tbody tr { border-bottom:0.5px solid var(--border); transition:background .1s; }
 tbody tr:last-child { border-bottom:none; }
 tbody tr:hover { background:var(--bg2); }
 tbody tr.selected { background:var(--usm-purple-light); }
-tbody tr.flagged { background:var(--usm-orange-light); }
 td { padding:12px; vertical-align:top; }
 td:first-child { text-align:center; vertical-align:middle; }
 input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); cursor:pointer; }
@@ -419,19 +418,16 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
        CASE QUESTION SCREENS (rendered by JS)
        IDs: step-case-q1-{caseIdx} through step-case-q5-{caseIdx}
   ══════════════════════════════════════════ -->
-  <div id="step-case-q0-0" class="card hidden"></div>
   <div id="step-case-q1-0" class="card hidden"></div>
   <div id="step-case-q2-0" class="card hidden"></div>
   <div id="step-case-q3-0" class="card hidden"></div>
   <div id="step-case-q4-0" class="card hidden"></div>
 
-  <div id="step-case-q0-1" class="card hidden"></div>
   <div id="step-case-q1-1" class="card hidden"></div>
   <div id="step-case-q2-1" class="card hidden"></div>
   <div id="step-case-q3-1" class="card hidden"></div>
   <div id="step-case-q4-1" class="card hidden"></div>
 
-  <div id="step-case-q0-2" class="card hidden"></div>
   <div id="step-case-q1-2" class="card hidden"></div>
   <div id="step-case-q2-2" class="card hidden"></div>
   <div id="step-case-q3-2" class="card hidden"></div>
@@ -1469,13 +1465,14 @@ function buildCaseQ4(ci) {
   if (!st.perfAnswers)    st.perfAnswers    = {};
   if (!st.perfRefinements) st.perfRefinements = {};
 
-  const cls = st.classifications || {};
+  // All active MCDA criteria — st.selected already contains:
+  //   Q1B remain/merge criteria + Q1A moved_to_mcda criteria + custom MCDA
+  //   in ranked order from Q3
+  const amList = st.selected || [];
 
-  // Wajib criteria — in original CRITERIA order
-  const wajibList = CRITERIA.filter(c => cls[c.name] === 'wajib');
-
-  // Am criteria — in rank order from Q3 (st.selected is already ranked)
-  const amList = st.selected.filter(c => cls[c.name] === 'am');
+  /* REMOVED — wajibList no longer shown in Q4
+  const wajibList = [];
+  */
 
   function perfCard(c, key, rankNum) {
     const saved = st.perfAnswers[key] ?? 'agree';
@@ -1528,13 +1525,9 @@ function buildCaseQ4(ci) {
       ${cards}`;
   }
 
-  /* REMOVED — Wajib section not shown in Q4
-  let wajibSection = '';
-  if (wajibList.length) {
-    const cards = wajibList.map(c => perfCard(c, `w_${c.name}`, null)).join('');
-    wajibSection = `...`;
-  }
-  */
+  // REMOVED — Wajib section not shown in Q4
+  // let wajibSection = '';
+  // wajibList section removed
 
   // Custom MCDA criteria section — in Q1B suggested order
   let customSection = '';
@@ -1566,7 +1559,7 @@ function buildCaseQ4(ci) {
   }
 
   const emptyMsg = !amList.length
-    ? `<div style="background:var(--amber-bg);border:0.5px solid rgba(186,117,23,.3);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--amber-text);line-height:1.6">You did not classify any criteria as <em>MCDA criteria</em> in Question 1B. You may proceed.</div>`
+    ? `<div style="background:var(--amber-bg);border:0.5px solid rgba(186,117,23,.3);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:var(--amber-text);line-height:1.6">No MCDA criteria were carried forward. You may proceed.</div>`
     : '';
 
   const nextLabel  = isLastCase ? 'Submit &#8594;' : `Proceed to case ${['I','II','III'][ci+1]} &#8594;`;
@@ -1607,35 +1600,26 @@ function saveCustomPerfLevel(ci, idx) {
 }
 
 function saveQ4(ci) {
-  const st  = caseState[ci];
-  const cls = st.classifications || {};
+  const st = caseState[ci];
   if (!st.perfAnswers)     st.perfAnswers     = {};
   if (!st.perfRefinements) st.perfRefinements = {};
-  // Only save MCDA criteria
-  CRITERIA.forEach(c => {
-    if ((cls[c.name] || '') === 'am') {
-      const key = `a_${c.name}`;
-      const val = document.querySelector(`input[name="q4ans-${ci}-${key}"]:checked`)?.value || '';
-      st.perfAnswers[key] = val;
-      const ta = document.getElementById(`q4ta-${ci}-${key}`);
-      if (ta) st.perfRefinements[key] = ta.value.trim();
-    }
+  // Save all active MCDA criteria (st.selected = Q1B remain/merge + Q1A moved + custom)
+  (st.selected || []).forEach(c => {
+    const key = `a_${c.name}`;
+    const val = document.querySelector(`input[name="q4ans-${ci}-${key}"]:checked`)?.value || '';
+    st.perfAnswers[key] = val;
+    const ta = document.getElementById(`q4ta-${ci}-${key}`);
+    if (ta) st.perfRefinements[key] = ta.value.trim();
   });
-  /* REMOVED — wajib and custom criteria not in Q4
-  CRITERIA.forEach(c => { if (cls[c.name]==='wajib') { ... } });
-  (st.customCriteria||[]).forEach(...);
-  */
 }
 
 function validateQ4(ci) {
-  const st  = caseState[ci];
-  const cls = st.classifications || {};
+  const st = caseState[ci];
   let allValid   = true;
   let firstError = null;
-  // Only validate MCDA criteria
-  CRITERIA.forEach(c => {
-    const classification = cls[c.name];
-    if (classification === 'am') {
+  // Validate all active MCDA criteria
+  (st.selected || []).forEach(c => {
+    if (true) {
       const key = `a_${c.name}`;
       const val = document.querySelector(`input[name="q4ans-${ci}-${key}"]:checked`)?.value || 'agree';
       const msg = document.getElementById(`q4val-${ci}-${key}`);
@@ -1809,8 +1793,7 @@ function renderSummary(row) {
     </div>
     ${CASES.map((cas,ci) => {
       const st  = caseState[ci];
-      const cls = st.classifications || {};
-      const mcdaCount   = Object.values(st.q1bChoices || {}).filter(v => v.action==='remain'||v.action==='merge').length;
+      const mcdaCount   = (st.selected || []).length;
       const q4AmendCount = CRITERIA.filter(c => {
         const key = `a_${c.name}`;
         return (st.perfAnswers || {})[key] === 'amend';
@@ -1831,7 +1814,6 @@ function renderSummary(row) {
 function resetForm() {
   ['partName','partRole','partDept','partExp'].forEach(id=>document.getElementById(id).value='');
   const tenderYes = document.querySelector('input[name="partTenderExp"][value="yes"]'); if (tenderYes) tenderYes.checked = true;
-  caseState.forEach((st,i) => { caseState[i] = freshCaseState(); });
   caseState.forEach((st,i) => { caseState[i] = freshCaseState(); });
   window._lastSubmission = null;
   nav('details');
