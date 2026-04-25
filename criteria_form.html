@@ -443,7 +443,7 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
     </div>
 
     <!-- ── Send a copy ── -->
-    <div style="margin-top:1.5rem;background:var(--usm-purple-light);border:1px solid var(--usm-purple-mid);border-radius:var(--radius);padding:18px 20px">
+    <div style="margin-top:1.5rem;background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.15);border-radius:var(--radius);padding:18px 20px">
       <div style="font-size:14px;font-weight:600;color:var(--usm-purple);margin-bottom:4px">Would you like a copy of your responses?</div>
       <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">We can email you a PDF summary of everything you submitted. Your email address will not be stored or used for any other purpose.</p>
 
@@ -534,7 +534,7 @@ function resetFont()      { applyFont(FONT_DEFAULT); }
 //  FORM VERSION
 // ─────────────────────────────────────────────────────────────
 const FORM_VERSION = '2.0';
-const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbw5U_bPIwkfSgOQWD8hkouNnsytjQ7dfDw0Bsjkz7yfsPvOE-lUIIiI559cGMsg2A/exec';
+const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbwNA8rIUYxSkukTSpXQW0ogrjukWeJqAwKb8z9A-cawnKnbX4V9svTHpiAwKkq1UXk/exec';
 
 // ─────────────────────────────────────────────────────────────
 //  CASE DEFINITIONS
@@ -1010,7 +1010,7 @@ function buildCaseQ1(ci) {
         '<button type="button" onclick="addCustomWajibRow(' + ci + ')" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px dashed rgba(255,115,0,.4);border-radius:var(--radius);background:rgba(255,115,0,.07);color:var(--usm-orange);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px"><span style="font-size:18px;line-height:1">+</span> Add criterion</button>' +
       '</div>' +
     '</div>' +
-    '<div style="background:var(--usm-purple-light);border:1px solid var(--usm-purple-mid);border-radius:var(--radius);padding:16px 18px">' +
+    '<div style="background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.15);border-radius:var(--radius);padding:16px 18px">' +
       '<div class="q-label" style="margin-bottom:6px">Case ' + cn + ' \u2014 Question 1B of 4</div>' +
       '<div class="q-title" style="font-weight:400;margin-bottom:6px">Considering the specific details of Procurement Case ' + cn + ', consider if the below listed criteria should be <strong>\'MCDA criteria\'</strong> or not for the evaluation of a tender bid</div>' +
       '<div style="font-size:12px;color:var(--usm-purple);margin-bottom:14px;line-height:1.7"><strong>MCDA criteria:</strong> performance-based specification / criteria used to score and rank the eligible alternatives through weighted trade-offs.</div>' +
@@ -1481,7 +1481,7 @@ function buildCaseQ4(ci) {
     ).join('');
 
     const rankBadge = rankNum != null
-      ? `<div style="min-width:28px;height:28px;border-radius:50%;background:var(--usm-purple-light);border:1px solid var(--usm-purple-mid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--usm-purple);flex-shrink:0">${rankNum}</div>`
+      ? `<div style="min-width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--usm-purple);flex-shrink:0">${rankNum}</div>`
       : '';
 
     return `
@@ -1515,47 +1515,98 @@ function buildCaseQ4(ci) {
     </div>`;
   }
 
-  // Build MCDA section (in ranked order from Q3)
+  // Split amList into standard MCDA and suggested (moved from mandatory + custom)
+  const standardList  = amList.filter(c => !c.movedFromMandatory && !c.isCustom);
+  const suggestedList = amList.filter(c =>  c.movedFromMandatory ||  c.isCustom);
+
+  // Build standard MCDA section (Q1B remain/merge, ranked order from Q3)
   let mcdaSection = '';
-  if (amList.length) {
-    const cards = amList.map((c, i) => perfCard(c, `a_${c.name}`, i+1)).join('');
+  if (standardList.length) {
+    const cards = standardList.map((c) => {
+      const rankNum = amList.indexOf(c) + 1;
+      return perfCard(c, `a_${c.name}`, rankNum);
+    }).join('');
     mcdaSection = `
       <div style="font-size:15px;font-weight:600;color:var(--usm-purple);margin-bottom:4px;margin-top:1.25rem">MCDA criteria</div>
       <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Criteria you classified as MCDA, shown in your ranked order from Question 3.</p>
       ${cards}`;
   }
 
-  // REMOVED — Wajib section not shown in Q4
-  // let wajibSection = '';
-  // wajibList section removed
-
-  // Custom MCDA criteria section — in Q1B suggested order
+  // Build suggested criteria section (Q1A moved to MCDA + Q1B custom suggested)
   let customSection = '';
-  const customList = (st.customCriteria || []).filter(r => r.name && r.name.trim());
-  if (customList.length) {
-    const customCards = customList.map((r, idx) => {
-      const savedPerf = r.perfLevels || '';
-      return `
-      <div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:10px;padding:0;overflow:hidden">
-        <div style="width:100%;padding:10px 14px;background:var(--bg2);border-bottom:0.5px solid var(--border)">
-          <div style="font-size:11px;font-weight:600;color:var(--usm-orange);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Suggested MCDA criterion</div>
-          <div class="crit-card-name">${r.name}</div>
-          <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:4px">${r.def}</div>
-        </div>
-        <div style="width:100%;padding:12px 14px;background:var(--bg)">
-          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Proposed performance levels</div>
-          <p style="font-size:12px;color:var(--text2);margin-bottom:8px">Describe the performance levels you would suggest for this criterion.</p>
-          <textarea id="q4custom-${ci}-${idx}" rows="4"
-            placeholder="e.g. Level 1 — Minimum acceptable standard. Level 2 — Good practice. Level 3 — Optimal..."
-            style="width:100%;background:var(--bg)"
-            oninput="saveCustomPerfLevel(${ci},${idx})">${savedPerf}</textarea>
+  if (suggestedList.length) {
+    // Separate the two types for display labelling
+    // Helper for suggested card shell (rank badge + name + desc)
+    const suggestedCardHeader = (c, rankNum, accentColor, badgeBg, badgeBorder) => {
+      const rankBadge = `<div style="min-width:28px;height:28px;border-radius:50%;background:${badgeBg};border:1px solid ${badgeBorder};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:${accentColor};flex-shrink:0">${rankNum}</div>`;
+      return `<div style="width:100%;padding:10px 14px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;gap:10px">
+        ${rankBadge}
+        <div style="flex:1">
+          <div class="crit-card-name">${c.name}</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:4px">${c.desc}</div>
         </div>
       </div>`;
-    }).join('');
+    };
+
+    const suggestedPerfBox = (ci, key) => {
+      const saved = (st.perfRefinements && st.perfRefinements[key]) || '';
+      return `<div style="width:100%;padding:12px 14px;background:var(--bg)">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Proposed performance levels</div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:8px">Describe the performance levels you would suggest for this criterion.</p>
+        <textarea id="q4ta-${ci}-${key}" rows="4"
+          placeholder="e.g. Level 1 — Minimum acceptable standard. Level 2 — Good practice. Level 3 — Optimal..."
+          style="width:100%;background:var(--bg)"
+          oninput="saveSuggestedPerfText('${ci}','${key}')">${saved}</textarea>
+      </div>`;
+    };
+
+    // Criteria moved from Q1A mandatory → MCDA
+    const movedCards = suggestedList
+      .filter(c => c.movedFromMandatory)
+      .map(c => {
+        const rankNum = amList.indexOf(c) + 1;
+        const key = `moved_${c.name}`;
+        return `<div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:8px;padding:0;overflow:hidden">
+          ${suggestedCardHeader(c, rankNum, '#FF7300', 'rgba(255,115,0,.1)', 'rgba(255,115,0,.4)')}
+          ${suggestedPerfBox(ci, key)}
+        </div>`;
+      }).join('');
+
+    // Criteria suggested/added in Q1B
+    const customCards = suggestedList
+      .filter(c => c.isCustom)
+      .map(c => {
+        const rankNum = amList.indexOf(c) + 1;
+        const idx = (st.customCriteria || []).findIndex(r => r.name === c.name);
+        const savedPerf = idx >= 0 ? (st.customCriteria[idx].perfLevels || '') : '';
+        const key = `custom_${c.name}`;
+        return `<div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:8px;padding:0;overflow:hidden">
+          ${suggestedCardHeader(c, rankNum, 'var(--usm-purple)', 'var(--usm-purple-light)', 'var(--usm-purple-mid)')}
+          <div style="width:100%;padding:12px 14px;background:var(--bg)">
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Proposed performance levels</div>
+            <p style="font-size:12px;color:var(--text2);margin-bottom:8px">Describe the performance levels you would suggest for this criterion.</p>
+            <textarea id="q4custom-${ci}-${idx}" rows="4"
+              placeholder="e.g. Level 1 — Minimum acceptable standard. Level 2 — Good practice. Level 3 — Optimal..."
+              style="width:100%;background:var(--bg)"
+              oninput="saveCustomPerfLevel(${ci},${idx})">${savedPerf}</textarea>
+          </div>
+        </div>`;
+      }).join('');
+
+    const movedSection = movedCards ? `
+      <div style="font-size:13px;font-weight:600;color:var(--usm-orange);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:8px">
+        Moved from mandatory criteria (Q1A)
+      </div>${movedCards}` : '';
+
+    const customSection2 = customCards ? `
+      <div style="font-size:13px;font-weight:600;color:var(--usm-purple);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:${movedCards?'16px':'8px'}">
+        Suggested criteria added in Q1B
+      </div>${customCards}` : '';
+
     customSection = `
       <div style="font-size:15px;font-weight:600;color:var(--usm-purple);margin-bottom:4px;margin-top:1.25rem">Suggested MCDA criteria</div>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Criteria you added in Question 1B. Propose performance levels for each.</p>
-      ${customCards}`;
+      <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Criteria you moved from mandatory or added manually. Propose performance levels for each, shown with their rank from Question 3.</p>
+      ${movedSection}${customSection2}`;
   }
 
   const emptyMsg = !amList.length
@@ -1597,6 +1648,14 @@ function saveCustomPerfLevel(ci, idx) {
   if (ta && caseState[ci].customCriteria && caseState[ci].customCriteria[idx]) {
     caseState[ci].customCriteria[idx].perfLevels = ta.value.trim();
   }
+}
+
+function saveSuggestedPerfText(ci, key) {
+  const ta = document.getElementById(`q4ta-${ci}-${key}`);
+  if (!ta) return;
+  const st = caseState[ci];
+  if (!st.perfRefinements) st.perfRefinements = {};
+  st.perfRefinements[key] = ta.value.trim();
 }
 
 function saveQ4(ci) {
