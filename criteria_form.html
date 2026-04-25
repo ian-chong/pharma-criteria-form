@@ -236,17 +236,31 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
       <div><label class="field-label">Designation / role *</label><input type="text" id="partRole" placeholder="e.g. Clinical Pharmacist" /></div>
     </div>
     <div class="field-row">
-      <div><label class="field-label">Institution *</label><input type="text" id="partDept" placeholder="e.g. Hospital Pakar USM" /></div>
+      <div>
+      <label class="field-label">Institution *</label>
+      <select id="partDept" onchange="toggleOtherInst()" style="width:100%;padding:9px 12px;font-size:14px;font-family:inherit;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);outline:none">
+        <option value="">-- Select institution --</option>
+        <option value="HPUSM">HPUSM</option>
+        <option value="PKTAAB">PKTAAB</option>
+        <option value="Pusat Sejahtera">Pusat Sejahtera</option>
+        <option value="Bursary USM">Bursary USM</option>
+        <option value="Others">Others</option>
+      </select>
+      <div id="otherInstWrap" class="hidden" style="margin-top:8px">
+        <input type="text" id="partDeptOther" placeholder="Please specify your institution"
+          style="width:100%;padding:9px 12px;font-size:14px;font-family:inherit;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);outline:none" />
+      </div>
+    </div>
       <div><label class="field-label">Years of pharmaceutical procurement experience *</label><input type="text" id="partExp" placeholder="e.g. 12 years" /></div>
     </div>
     <div style="margin-top:1rem">
       <label class="field-label">Experience in technical or financial evaluation of tender *</label>
       <div style="display:flex;gap:10px;margin-top:8px">
         <label style="display:flex;align-items:center;gap:8px;padding:9px 20px;border:1.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500">
-          <input type="radio" name="partTenderExp" value="yes" checked style="accent-color:var(--usm-purple);width:15px;height:15px" /> Yes
+          <input type="radio" name="partTenderExp" value="yes" checked style="accent-color:#1a1a1a;width:15px;height:15px" /> Yes
         </label>
         <label style="display:flex;align-items:center;gap:8px;padding:9px 20px;border:1.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500">
-          <input type="radio" name="partTenderExp" value="no" style="accent-color:var(--usm-purple);width:15px;height:15px" /> No
+          <input type="radio" name="partTenderExp" value="no" style="accent-color:#1a1a1a;width:15px;height:15px" /> No
         </label>
       </div>
     </div>
@@ -300,29 +314,29 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">fair</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">20</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">1</td>
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">good</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">80</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">2</td>
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">excellent</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">100</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">3</td>
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle" rowspan="3">Criteria B</td>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle" rowspan="3">0.35</td>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">≤ 1 years</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">0</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">1</td>
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">2 years</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">50</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">2</td>
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">&gt; 2 years</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">100</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">3</td>
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle" rowspan="3">Criteria C</td>
@@ -332,11 +346,11 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">fair</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">60</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">1</td>
             </tr>
             <tr>
               <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">excellent</td>
-              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">100</td>
+              <td style="border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle">2</td>
             </tr>
           </tbody>
         </table>
@@ -534,7 +548,7 @@ function resetFont()      { applyFont(FONT_DEFAULT); }
 //  FORM VERSION
 // ─────────────────────────────────────────────────────────────
 const FORM_VERSION = '2.0';
-const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbwNA8rIUYxSkukTSpXQW0ogrjukWeJqAwKb8z9A-cawnKnbX4V9svTHpiAwKkq1UXk/exec';
+const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbzcZ0J362ZlbjDPcuYtchL3O4ZpcIn6VvQffWmAGUE2VqNaMIgMruS-AFpTKXjBFTw/exec';
 
 // ─────────────────────────────────────────────────────────────
 //  CASE DEFINITIONS
@@ -837,7 +851,9 @@ function nav(stepId) {
   if (currentStep === 'details' && stepId !== 'details') {
     const name       = document.getElementById('partName').value.trim();
     const role       = document.getElementById('partRole').value.trim();
-    const dept       = document.getElementById('partDept').value.trim();
+    const deptSel    = document.getElementById('partDept').value.trim();
+    const deptOther  = document.getElementById('partDeptOther')?.value.trim() || '';
+    const dept       = deptSel === 'Others' ? deptOther : deptSel;
     const exp        = document.getElementById('partExp').value.trim();
     const tenderExp  = document.querySelector('input[name="partTenderExp"]:checked')?.value || '';
     if (!name || !role || !dept || !exp || !tenderExp) {
@@ -953,7 +969,7 @@ function buildCaseQ1(ci) {
     const btns = acts.map(function(act) {
       const sel = ch.action === act;
       return '<label style="' + btnStyle(sel,'orange') + '">' +
-        '<input type="radio" name="q1a-act-' + ci + '-' + i + '" value="' + act + '" ' + (sel?'checked':'') + ' onchange="saveQ1AChoice(' + ci + ',' + i + ',\'' + act + '\')" style="accent-color:var(--usm-orange);width:15px;height:15px" /> ' + lbls[act] +
+        '<input type="radio" name="q1a-act-' + ci + '-' + i + '" value="' + act + '" ' + (sel?'checked':'') + ' onchange="saveQ1AChoice(' + ci + ',' + i + ',\'' + act + '\')" style="accent-color:#1a1a1a;width:15px;height:15px" /> ' + lbls[act] +
         '</label>';
     }).join('');
     return '<div style="border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;background:var(--bg)">' +
@@ -975,7 +991,7 @@ function buildCaseQ1(ci) {
     const btns = acts.map(function(act) {
       const sel = ch.action === act;
       return '<label style="' + btnStyle(sel,'purple') + '">' +
-        '<input type="radio" name="q1b-act-' + ci + '-' + i + '" value="' + act + '" ' + (sel?'checked':'') + ' onchange="saveQ1BChoice(' + ci + ',' + i + ',\'' + act + '\')" style="accent-color:var(--usm-purple);width:15px;height:15px" /> ' + lbls[act] +
+        '<input type="radio" name="q1b-act-' + ci + '-' + i + '" value="' + act + '" ' + (sel?'checked':'') + ' onchange="saveQ1BChoice(' + ci + ',' + i + ',\'' + act + '\')" style="accent-color:#D95E00;width:15px;height:15px" /> ' + lbls[act] +
         '</label>';
     }).join('');
     const placeholder = ch.action === 'merge'
@@ -998,30 +1014,30 @@ function buildCaseQ1(ci) {
 
   el.innerHTML =
     caseHeader(ci) +
-    '<div style="background:rgba(255,115,0,.07);border:1px solid rgba(255,115,0,.25);border-radius:var(--radius);padding:16px 18px;margin-bottom:1.5rem">' +
+    '<div style="background:var(--usm-purple-light);border:1px solid var(--usm-purple-mid);border-radius:var(--radius);padding:16px 18px;margin-bottom:1.5rem">' +
       '<div class="q-label" style="margin-bottom:6px">Case ' + cn + ' \u2014 Question 1A of 4</div>' +
       '<div class="q-title" style="font-weight:400;margin-bottom:6px">Considering the specific details of Procurement Case ' + cn + ', consider if the below listed criteria are <strong>\'mandatory criteria\'</strong> in the evaluation of a tender bid</div>' +
       '<div style="font-size:12px;color:var(--usm-orange);margin-bottom:14px;line-height:1.7"><strong>Mandatory criteria:</strong> binary specification / criteria to fulfil and perform positively to meet the minimum standard in order to be considered for evaluation.</div>' +
       wajibCards +
-      '<div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,115,0,.25)">' +
-        '<div style="font-size:14px;font-weight:600;color:var(--usm-orange);margin-bottom:4px">Suggested mandatory criteria</div>' +
+      '<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--usm-purple-mid)">' +
+        '<div style="font-size:14px;font-weight:600;color:var(--usm-purple);margin-bottom:4px">Suggested mandatory criteria</div>' +
         '<p style="font-size:13px;color:var(--text2);margin-bottom:12px">If there are mandatory criteria not included in the list above, add them here.</p>' +
         '<div id="custom-wajib-rows-' + ci + '"></div>' +
-        '<button type="button" onclick="addCustomWajibRow(' + ci + ')" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px dashed rgba(255,115,0,.4);border-radius:var(--radius);background:rgba(255,115,0,.07);color:var(--usm-orange);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px"><span style="font-size:18px;line-height:1">+</span> Add criterion</button>' +
+        '<button type="button" onclick="addCustomWajibRow(' + ci + ')" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px dashed var(--usm-purple-mid);border-radius:var(--radius);background:var(--bg);color:var(--usm-purple);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px"><span style="font-size:18px;line-height:1">+</span> Add criterion</button>' +
       '</div>' +
     '</div>' +
     '<div style="background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.15);border-radius:var(--radius);padding:16px 18px">' +
       '<div class="q-label" style="margin-bottom:6px">Case ' + cn + ' \u2014 Question 1B of 4</div>' +
       '<div class="q-title" style="font-weight:400;margin-bottom:6px">Considering the specific details of Procurement Case ' + cn + ', consider if the below listed criteria should be <strong>\'MCDA criteria\'</strong> or not for the evaluation of a tender bid</div>' +
-      '<div style="font-size:12px;color:var(--usm-purple);margin-bottom:14px;line-height:1.7"><strong>MCDA criteria:</strong> performance-based specification / criteria used to score and rank the eligible alternatives through weighted trade-offs.</div>' +
+      '<div style="font-size:12px;color:#D95E00;margin-bottom:14px;line-height:1.7"><strong>MCDA criteria:</strong> performance-based specification / criteria used to score and rank the eligible alternatives through weighted trade-offs.</div>' +
       preloadNotice +
       mcdaCards +
       '<div id="q1b-val-' + ci + '" class="hidden" style="font-size:13px;color:#a32d2d;margin-top:10px;margin-bottom:4px"></div>' +
       '<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--usm-purple-mid)">' +
-        '<div style="font-size:14px;font-weight:600;color:var(--usm-purple);margin-bottom:4px">Suggested MCDA criteria</div>' +
+        '<div style="font-size:14px;font-weight:600;color:#D95E00;margin-bottom:4px">Suggested MCDA criteria</div>' +
         '<p style="font-size:13px;color:var(--text2);margin-bottom:12px">If there are MCDA criteria not included in the list above, add them here. Enter the criteria name and a definition.</p>' +
         '<div id="custom-rows-' + ci + '"></div>' +
-        '<button type="button" onclick="addCustomRow(' + ci + ')" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px dashed var(--usm-purple-mid);border-radius:var(--radius);background:var(--bg);color:var(--usm-purple);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px"><span style="font-size:18px;line-height:1">+</span> Add criterion</button>' +
+        '<button type="button" onclick="addCustomRow(' + ci + ')" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px dashed rgba(210,80,0,.4);border-radius:var(--radius);background:rgba(210,80,0,.05);color:#D95E00;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px"><span style="font-size:18px;line-height:1">+</span> Add criterion</button>' +
       '</div>' +
     '</div>' +
     '<div class="footer">' +
@@ -1033,6 +1049,13 @@ function buildCaseQ1(ci) {
     '</div>';
   renderCustomRows(ci);
   renderCustomWajibRows(ci);
+}
+
+
+function toggleOtherInst() {
+  const sel  = document.getElementById('partDept');
+  const wrap = document.getElementById('otherInstWrap');
+  if (wrap) wrap.classList.toggle('hidden', sel.value !== 'Others');
 }
 
 
@@ -1323,10 +1346,10 @@ function buildCaseQ2(ci) {
         <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">Do you agree with the current definition? <span style="color:#a32d2d">*</span></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
           <label style="display:flex;align-items:center;gap:8px;padding:9px 16px;border:1.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500;transition:background .1s">
-            <input type="radio" name="q2ans-${ci}-${i}" value="agree" ${saved==='agree'?'checked':''} onchange="toggleQ2Field(${ci},${i})" style="accent-color:var(--usm-purple);width:15px;height:15px" /> Agree
+            <input type="radio" name="q2ans-${ci}-${i}" value="agree" ${saved==='agree'?'checked':''} onchange="toggleQ2Field(${ci},${i})" style="accent-color:#D95E00;width:15px;height:15px" /> Agree
           </label>
           <label style="display:flex;align-items:center;gap:8px;padding:9px 16px;border:1.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500;transition:background .1s">
-            <input type="radio" name="q2ans-${ci}-${i}" value="amend" ${saved==='amend'?'checked':''} onchange="toggleQ2Field(${ci},${i})" style="accent-color:var(--usm-purple);width:15px;height:15px" /> Suggest amendments
+            <input type="radio" name="q2ans-${ci}-${i}" value="amend" ${saved==='amend'?'checked':''} onchange="toggleQ2Field(${ci},${i})" style="accent-color:#D95E00;width:15px;height:15px" /> Suggest amendments
           </label>
         </div>
         <div id="q2val-${ci}-${i}" class="hidden" style="font-size:13px;color:#a32d2d;margin-bottom:8px">Please describe your suggested amendments before proceeding.</div>
@@ -1501,10 +1524,10 @@ function buildCaseQ4(ci) {
         <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">Do you agree with the current performance levels? <span style="color:#a32d2d">*</span></div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
           <label style="display:flex;align-items:center;gap:8px;padding:9px 16px;border:1.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500;transition:background .1s">
-            <input type="radio" name="q4ans-${ci}-${key}" value="agree" ${saved==='agree'?'checked':''} data-ci="${ci}" data-key="${key}" onchange="toggleQ4Field(this)" style="accent-color:var(--usm-purple);width:15px;height:15px" /> Agree
+            <input type="radio" name="q4ans-${ci}-${key}" value="agree" ${saved==='agree'?'checked':''} data-ci="${ci}" data-key="${key}" onchange="toggleQ4Field(this)" style="accent-color:#D95E00;width:15px;height:15px" /> Agree
           </label>
           <label style="display:flex;align-items:center;gap:8px;padding:9px 16px;border:1.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500;transition:background .1s">
-            <input type="radio" name="q4ans-${ci}-${key}" value="amend" ${saved==='amend'?'checked':''} data-ci="${ci}" data-key="${key}" onchange="toggleQ4Field(this)" style="accent-color:var(--usm-purple);width:15px;height:15px" /> Suggest amendments
+            <input type="radio" name="q4ans-${ci}-${key}" value="amend" ${saved==='amend'?'checked':''} data-ci="${ci}" data-key="${key}" onchange="toggleQ4Field(this)" style="accent-color:#D95E00;width:15px;height:15px" /> Suggest amendments
           </label>
         </div>
         <div id="q4val-${ci}-${key}" class="hidden" style="font-size:13px;color:#a32d2d;margin-bottom:8px">Please select an option to continue.</div>
@@ -1560,53 +1583,36 @@ function buildCaseQ4(ci) {
       </div>`;
     };
 
-    // Criteria moved from Q1A mandatory → MCDA
-    const movedCards = suggestedList
-      .filter(c => c.movedFromMandatory)
-      .map(c => {
-        const rankNum = amList.indexOf(c) + 1;
-        const key = `moved_${c.name}`;
-        return `<div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:8px;padding:0;overflow:hidden">
-          ${suggestedCardHeader(c, rankNum, '#FF7300', 'rgba(255,115,0,.1)', 'rgba(255,115,0,.4)')}
-          ${suggestedPerfBox(ci, key)}
-        </div>`;
-      }).join('');
-
-    // Criteria suggested/added in Q1B
-    const customCards = suggestedList
-      .filter(c => c.isCustom)
-      .map(c => {
-        const rankNum = amList.indexOf(c) + 1;
-        const idx = (st.customCriteria || []).findIndex(r => r.name === c.name);
-        const savedPerf = idx >= 0 ? (st.customCriteria[idx].perfLevels || '') : '';
-        const key = `custom_${c.name}`;
-        return `<div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:8px;padding:0;overflow:hidden">
-          ${suggestedCardHeader(c, rankNum, 'var(--usm-purple)', 'var(--usm-purple-light)', 'var(--usm-purple-mid)')}
-          <div style="width:100%;padding:12px 14px;background:var(--bg)">
-            <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Proposed performance levels</div>
-            <p style="font-size:12px;color:var(--text2);margin-bottom:8px">Describe the performance levels you would suggest for this criterion.</p>
-            <textarea id="q4custom-${ci}-${idx}" rows="4"
-              placeholder="e.g. Level 1 — Minimum acceptable standard. Level 2 — Good practice. Level 3 — Optimal..."
-              style="width:100%;background:var(--bg)"
-              oninput="saveCustomPerfLevel(${ci},${idx})">${savedPerf}</textarea>
+    // All suggested criteria — moved from Q1A and added in Q1B — unified section
+    const allSuggestedCards = suggestedList.map(c => {
+      const rankNum = amList.indexOf(c) + 1;
+      const key = `sugg_${c.name}`;
+      const saved = (st.perfRefinements && st.perfRefinements[key]) || '';
+      const rankBadge = `<div style="min-width:28px;height:28px;border-radius:50%;background:var(--usm-purple-light);border:1px solid var(--usm-purple-mid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--usm-purple);flex-shrink:0">${rankNum}</div>`;
+      return `<div class="crit-card" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:8px;padding:0;overflow:hidden">
+        <div style="width:100%;padding:10px 14px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;gap:10px">
+          ${rankBadge}
+          <div style="flex:1">
+            <div class="crit-card-name">${c.name}</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-top:4px">${c.desc}</div>
           </div>
-        </div>`;
-      }).join('');
+        </div>
+        <div style="width:100%;padding:12px 14px;background:var(--bg)">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Proposed performance levels <span style="color:#a32d2d">*</span></div>
+          <p style="font-size:12px;color:var(--text2);margin-bottom:8px">Describe the performance levels you would suggest for this criterion.</p>
+          <textarea id="q4sugg-${ci}-${key}" rows="4"
+            placeholder="e.g. Level 1 — Minimum acceptable standard. Level 2 — Good practice. Level 3 — Optimal..."
+            style="width:100%;background:var(--bg)"
+            oninput="saveSuggestedPerfText('${ci}','${key}')">${saved}</textarea>
+          <div id="q4sugg-msg-${ci}-${key}" class="hidden" style="font-size:12px;color:#a32d2d;margin-top:4px">Please propose performance levels before proceeding.</div>
+        </div>
+      </div>`;
+    }).join('');
 
-    const movedSection = movedCards ? `
-      <div style="font-size:13px;font-weight:600;color:var(--usm-orange);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:8px">
-        Moved from mandatory criteria (Q1A)
-      </div>${movedCards}` : '';
-
-    const customSection2 = customCards ? `
-      <div style="font-size:13px;font-weight:600;color:var(--usm-purple);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;margin-top:${movedCards?'16px':'8px'}">
-        Suggested criteria added in Q1B
-      </div>${customCards}` : '';
-
-    customSection = `
-      <div style="font-size:15px;font-weight:600;color:var(--usm-purple);margin-bottom:4px;margin-top:1.25rem">Suggested MCDA criteria</div>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Criteria you moved from mandatory or added manually. Propose performance levels for each, shown with their rank from Question 3.</p>
-      ${movedSection}${customSection2}`;
+    customSection = allSuggestedCards ? `
+      <div style="font-size:15px;font-weight:600;color:var(--usm-purple);margin-bottom:4px;margin-top:1.25rem">Newly suggested and moved MCDA criteria</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Criteria you moved from mandatory or added in Q1B. Propose performance levels for each, shown with their rank from Question 3.</p>
+      ${allSuggestedCards}` : '';
   }
 
   const emptyMsg = !amList.length
@@ -1651,11 +1657,16 @@ function saveCustomPerfLevel(ci, idx) {
 }
 
 function saveSuggestedPerfText(ci, key) {
-  const ta = document.getElementById(`q4ta-${ci}-${key}`);
+  const ta = document.getElementById(`q4sugg-${ci}-${key}`);
   if (!ta) return;
   const st = caseState[ci];
   if (!st.perfRefinements) st.perfRefinements = {};
   st.perfRefinements[key] = ta.value.trim();
+  // Clear validation message on input
+  if (ta.value.trim()) {
+    const msg = document.getElementById(`q4sugg-msg-${ci}-${key}`);
+    if (msg) msg.classList.add('hidden');
+  }
 }
 
 function saveQ4(ci) {
@@ -1702,17 +1713,43 @@ function validateQ4(ci) {
 
 function proceedQ3back(ci) { buildCaseQ3(ci); nav('case-q3-' + ci); }
 
+function validateSuggestedPerf(ci) {
+  const st = caseState[ci];
+  const suggestedList = (st.selected || []).filter(c => c.movedFromMandatory || c.isCustom);
+  let firstError = null;
+  let allValid = true;
+  suggestedList.forEach(c => {
+    const key = `sugg_${c.name}`;
+    const saved = (st.perfRefinements && st.perfRefinements[key]) || '';
+    const ta = document.getElementById(`q4sugg-${ci}-${key}`);
+    const current = ta ? ta.value.trim() : saved;
+    if (!current) {
+      allValid = false;
+      const msg = document.getElementById(`q4sugg-msg-${ci}-${key}`);
+      if (msg) msg.classList.remove('hidden');
+      if (!firstError && ta) firstError = ta;
+    }
+  });
+  if (!allValid && firstError) {
+    firstError.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+  return allValid;
+}
+
 function validateAndNextCaseQ4(ci) {
   if (!validateQ4(ci)) return;
+  if (!validateSuggestedPerf(ci)) return;
   saveQ4(ci);
   nav('case-intro-' + (ci + 1));
 }
 
 function validateAndSubmitQ4(ci) {
   if (!validateQ4(ci)) return;
+  if (!validateSuggestedPerf(ci)) return;
   saveQ4(ci);
   submitForm();
 }
+
 
 function proceedToNextCase(ci) {
   saveQ4(ci);
@@ -1733,7 +1770,7 @@ async function submitForm() {
     timestamp:   new Date().toISOString(),
     name:        document.getElementById('partName').value.trim(),
     role:        document.getElementById('partRole').value.trim(),
-    institution: document.getElementById('partDept').value.trim(),
+    institution: (()=>{ const s=document.getElementById('partDept').value.trim(); return s==='Others'?(document.getElementById('partDeptOther')?.value.trim()||'Others'):s; })(),
     experience:  document.getElementById('partExp').value.trim(),
     tender_exp:  document.querySelector('input[name="partTenderExp"]:checked')?.value || '',
     dp_answer:   dpAnswer,
@@ -1768,10 +1805,20 @@ async function submitForm() {
       row[`${pre}_q2_refinement_${c.name}`] = defAnswer === 'amend' ? defRef : '';
     });
 
-    // Q3 — rank number per MCDA criterion (blank if not ranked)
+    // Q3 — rank for standard MCDA criteria
     CRITERIA.forEach(c => {
       const rankIdx = st.selected.findIndex(s => s.name === c.name);
       row[`${pre}_q3_${c.name}`] = rankIdx >= 0 ? rankIdx + 1 : '';
+    });
+    // Q3 — rank for suggested/moved criteria
+    (st.selected || []).filter(c => c.movedFromMandatory || c.isCustom).forEach(c => {
+      const rankIdx = st.selected.indexOf(c);
+      row[`${pre}_q3_sugg_${c.name}`] = rankIdx >= 0 ? rankIdx + 1 : '';
+    });
+    // Q4 — performance levels for suggested criteria (stored as sugg_ keys)
+    (st.selected || []).filter(c => c.movedFromMandatory || c.isCustom).forEach(c => {
+      const key = `sugg_${c.name}`;
+      row[`${pre}_q4_sugg_${c.name}`] = (st.perfRefinements || {})[key] || '';
     });
 
     // Q4 — performance answer and refinement per active criterion
