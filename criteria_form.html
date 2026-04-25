@@ -288,6 +288,88 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
         </ul>
       </div>
 
+
+      <div style="margin-top:1.25rem;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+        <!-- Left: text -->
+        <div style="flex:1;min-width:220px">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">Conceptual Framework for Tender Workflow Integration</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.8">The framework resulting from this research is designed for direct integration into the <em>Penilaian Teknikal</em> and <em>Penilaian Kewangan</em> phase of the current tender workflow in USM-affiliated healthcare facilities. By mapping scientifically rigorous methodology onto existing procurement process flows, the resulting framework facilitates a seamless transition from conceptual design to practical implementation to enhance the reproducibility of value-based outcomes.</p>
+          <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-top:8px">While the framework facilitates an integrated assessment of financial and technical criteria, its modular construct allows the specific committees to evaluate their respective domains independently. Ultimately, the resulting data subsequently merges into a unified, multi-dimensional and consolidated evaluation report.</p>
+        </div>
+        <!-- Right: flowchart SVG -->
+        <div style="flex:1;min-width:220px;display:flex;justify-content:center">
+          <svg viewBox="0 0 400 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;font-family:Inter,sans-serif">
+
+            <!-- Row 1: Kelulusan Belanjawan -->
+            <rect x="10" y="10" width="220" height="38" rx="6" fill="#C4B3E0"/>
+            <text x="120" y="33" text-anchor="middle" font-size="10" font-weight="600" fill="#2F015D">Kelulusan Belanjawan</text>
+
+            <!-- Arrow 1 -->
+            <line x1="120" y1="48" x2="120" y2="63" stroke="#9b87c8" stroke-width="2"/>
+            <polygon points="115,61 125,61 120,69" fill="#9b87c8"/>
+
+            <!-- Row 2 -->
+            <rect x="10" y="69" width="220" height="38" rx="6" fill="#C4B3E0"/>
+            <text x="120" y="85" text-anchor="middle" font-size="9" font-weight="600" fill="#2F015D">Perancangan Perolehan &amp;</text>
+            <text x="120" y="98" text-anchor="middle" font-size="9" font-weight="600" fill="#2F015D">Kajian Pasaran</text>
+
+            <!-- Arrow 2 -->
+            <line x1="120" y1="107" x2="120" y2="122" stroke="#9b87c8" stroke-width="2"/>
+            <polygon points="115,120 125,120 120,128" fill="#9b87c8"/>
+
+            <!-- Row 3 -->
+            <rect x="10" y="128" width="220" height="38" rx="6" fill="#C4B3E0"/>
+            <text x="120" y="144" text-anchor="middle" font-size="9" font-weight="600" fill="#2F015D">Penyediaan Spesifikasi &amp;</text>
+            <text x="120" y="157" text-anchor="middle" font-size="9" font-weight="600" fill="#2F015D">Dokumen</text>
+
+            <!-- Arrow 3 -->
+            <line x1="120" y1="166" x2="120" y2="181" stroke="#9b87c8" stroke-width="2"/>
+            <polygon points="115,179 125,179 120,187" fill="#9b87c8"/>
+
+            <!-- Row 4: Penilaian Tender box — ends at x=230 -->
+            <rect x="10" y="187" width="220" height="128" rx="6" fill="#C4B3E0"/>
+            <text x="120" y="206" text-anchor="middle" font-size="10" font-weight="700" fill="#2F015D">Penilaian Tender</text>
+
+            <!-- Two arrows from Penilaian Tender heading -->
+            <line x1="80" y1="210" x2="80" y2="222" stroke="#2F015D" stroke-width="1.5"/>
+            <polygon points="76,220 84,220 80,226" fill="#2F015D"/>
+            <line x1="162" y1="210" x2="162" y2="222" stroke="#2F015D" stroke-width="1.5"/>
+            <polygon points="158,220 166,220 162,226" fill="#2F015D"/>
+
+            <!-- Sub-column labels -->
+            <text x="80" y="238" text-anchor="middle" font-size="8" font-weight="600" fill="#2F015D">Penilaian</text>
+            <text x="80" y="248" text-anchor="middle" font-size="8" font-weight="600" fill="#2F015D">teknikal</text>
+            <text x="162" y="238" text-anchor="middle" font-size="8" font-weight="600" fill="#2F015D">Penilaian</text>
+            <text x="162" y="248" text-anchor="middle" font-size="8" font-weight="600" fill="#2F015D">kewangan</text>
+
+            <!-- Mandatory criteria row:
+                 Border box extends from x=18 to x=390 (crossing outside purple box)
+                 Inside portion (x=18 to 230): Spesifikasi wajib × 2
+                 Outside portion (x=230 to 390): "= Mandatory criteria" label -->
+            <rect x="18" y="256" width="372" height="22" rx="3" fill="white" stroke="#9b87c8" stroke-width="1"/>
+            <text x="70" y="271" text-anchor="middle" font-size="8" fill="#2F015D">Spesifikasi wajib</text>
+            <text x="168" y="271" text-anchor="middle" font-size="8" fill="#2F015D">Spesifikasi wajib</text>
+            <text x="234" y="271" text-anchor="start" font-size="10" fill="#9b87c8">&#x279F;</text>
+            <text x="248" y="271" text-anchor="start" font-size="8" font-weight="700" fill="#2F015D">Mandatory criteria</text>
+
+            <!-- MCDA criteria row -->
+            <rect x="18" y="284" width="372" height="22" rx="3" fill="white" stroke="#9b87c8" stroke-width="1"/>
+            <text x="70" y="299" text-anchor="middle" font-size="8" fill="#2F015D">Spesifikasi am</text>
+            <text x="168" y="299" text-anchor="middle" font-size="8" fill="#2F015D">Spesifikasi am</text>
+            <text x="234" y="299" text-anchor="start" font-size="10" fill="#9b87c8">&#x279F;</text>
+            <text x="248" y="299" text-anchor="start" font-size="8" font-weight="700" fill="#2F015D">MCDA criteria</text>
+
+            <!-- Big chevron arrow -->
+            <polygon points="50,325 190,325 190,335 210,335 120,358 30,335 50,335" fill="#9b87c8"/>
+
+            <!-- Row 5: Syor -->
+            <rect x="10" y="363" width="220" height="38" rx="6" fill="#C4B3E0"/>
+            <text x="120" y="386" text-anchor="middle" font-size="10" font-weight="700" fill="#2F015D">Syor &amp; Kelulusan Tender</text>
+
+          </svg>
+        </div>
+      </div>
+
       <div style="margin-top:1.25rem">
         <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">What is MCDA?</div>
         <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:10px">Making a complex decision involves more than just looking at a single factor like the lowest price. Multi-Criteria Decision Analysis (MCDA) is a structured framework used to compare different options by evaluating several factors simultaneously. Consider it as a professional "balancing act." Instead of choosing a medicine based solely on one criteria (i.e. price or efficacy), MCDA allows for the consideration of relevant criteria at the appropriate weightage. It transforms subjective opinions into a clear, transparent, and data-driven choice.</p>
@@ -548,7 +630,7 @@ function resetFont()      { applyFont(FONT_DEFAULT); }
 //  FORM VERSION
 // ─────────────────────────────────────────────────────────────
 const FORM_VERSION = '2.0';
-const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbzcZ0J362ZlbjDPcuYtchL3O4ZpcIn6VvQffWmAGUE2VqNaMIgMruS-AFpTKXjBFTw/exec';
+const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycby8ZD6ocg4H-mrxET5OL1lIq0y7U3Dp3KvvWCK-MlV4l8A0Hvn7R_FJhasvBcJZpkEO/exec';
 
 // ─────────────────────────────────────────────────────────────
 //  CASE DEFINITIONS
@@ -584,19 +666,19 @@ function caseHeader(ci) {
 // ─────────────────────────────────────────────────────────────
 const WAJIB_CRITERIA = [
   { name:"Product's basic profile: indication, formulation and strength",
-    desc:"The pharmaceutical profile consisting the indication refers to the approved specific clinical condition by the DCA, in the formulation referring to the specific dosage form, at the strength referring to the quantitative potency of the active ingredient per unit dose." },
+    desc:"The pharmaceutical profile consisting the indication refers to the specific clinical condition for use that has been approved by the authority, in the formulation referring to the specific dosage form, at the strength that refers to the quantitative potency of the active ingredient per unit dose." },
   { name:"Product's pharmaceutical equivalence",
     desc:"Products with the identical dosage forms and route of administration that contain identical amounts of the identical active pharmaceutical ingredient (API)." },
   { name:"Product's bioequivalence",
-    desc:"For generic oral preparations that are not registered in Malaysia, a Bioequivalence (BE) study report must be included." },
+    desc:"The property of an oral OPP product when bioequivalence is shown to be 90% confidence interval for the ratio of the test and reference products should be within the accepted interval of 80–125%. For generic oral preparations that are not registered in Malaysia, a Bioequivalence (BE) study report must be included." },
   { name:"Product's level of interchangeability",
     desc:"The property of a pharmaceutical product that is therapeutically equivalent to its reference pharmaceutical product, thereby allowing for therapeutic substitution." },
   { name:"Product's sample",
-    desc:"At least two (2) boxes of samples are included. Samples must be in original packaging approved by DCA that can be inspected during the assessment process. Sample exemption for psychotropic drugs, dangerous drugs and unregistered drug." },
+    desc:"At least 2 boxes of samples are included. Samples must be in original packaging that can be inspected during the assessment process. Samples must be included in original packaging approved by DCA. Sample exemption for psychotropic drugs, dangerous drugs and unregistered drugs." },
   { name:"Product's label",
-    desc:"The label on the bottle / strip / vial / ampoule / tube / package must meet the requirements of the DCA." },
+    desc:"The label on the bottle/strip/vial/ampoule/tube/package must meet the requirements of the DCA, namely: name of drug, content and quantity of active ingredient, batch number, expiry date, manufacturer, storage temperature, volume of product per vial/ampoule/bottle (if applicable)." },
   { name:"Product's packaging",
-    desc:"For tablet/capsule medicines, packaging in the form of 'strip pack' or 'blister pack'." },
+    desc:"Products must meet the requirements of the DCA and specific packaging needs of the tender." },
   { name:"Manufacturer's site quality certification",
     desc:"Manufacturing facility that operates in accordance with the Good Manufacturing Practice (GMP) standards that is audited and certified by NPRA or a PIC/S member." },
   { name:"Manufacturer's quality assurance of APIs and production process",
@@ -605,25 +687,24 @@ const WAJIB_CRITERIA = [
     desc:"Manufacturer's pharmacovigilance infrastructure for monitoring safety profiles of manufactured pharmaceuticals." },
   { name:"Service in technical assistance",
     desc:"Provision of expert support such as drug information service." },
-  { name:"Supply conditions",
+  { name:"Supply conditions (perihal bekalan)",
     desc:"For discontinued drugs, the supplier must notify in writing the Head of the Pharmacy Department, USM Specialist Hospital at least 6 months before action is taken. For drugs recalled from the market and supply disruptions, the supplier must notify in writing the Head of the Pharmacy Department, USM Specialist Hospital as soon as possible." },
   { name:"Statutory Compliance (EPF/SOCSO)",
     desc:"Verification of the latest 3 months' contribution statements. Non-compliance results in immediate rejection." }
 ];
 
 // ─────────────────────────────────────────────────────────────
-//  MCDA CRITERIA — 20 criteria for Q1B onwards
+//  MCDA CRITERIA — 14 criteria for Q1B onwards
 // ─────────────────────────────────────────────────────────────
 const CRITERIA = [
   {cat:"Product", name:"Product's excipients, process technology and delivery system",
-   desc:"Product's API, excipients namely inactive materials including animal-source, process technology including manufacturing methods, and delivery system such as standard dosage forms, specialised coatings or release products.",
+   desc:"Product's API, excipients namely inactive materials such as binders and lubricants, process technology including manufacturing methods, and delivery system such as standard dosage forms, specialised coatings or release products to ensure therapeutic efficacy and safety.",
    perfLevels:[
-     {num:"1",text:"Standard performance that incorporates standard excipients, using established technologies to produce conventional delivery systems, with unclear or no information on animal source."},
-     {num:"2",text:"Standard performance that incorporates standard excipients, using established technologies to produce conventional delivery systems, or with declared animal source information."},
-     {num:"3",text:"Optimal performance using permissible excipients and no animal source or using advanced process technology or delivery system."}
+     {num:"1",text:"Standard performance that incorporates restricted excipients (e.g. Red 2G), using established technologies (e.g. batch manufacturing) to produce conventional delivery systems (e.g. immediate release)."},
+     {num:"2",text:"Optimal performance using no restricted excipients or using advanced process technology (e.g. continuous manufacturing) or delivery system (e.g. specialised coating)."}
    ]},
-  {cat:"Product", name:"Declaration of animal source and HALAL status",
-   desc:"Declaration of animal source in product and healthcare services provided are in accordance to Syari'ah or Islamic values with certification from Jabatan Kemajuan Islam Malaysia (JAKIM) or other JAKIM-authorised bodies.",
+  {cat:"Product", name:"Syariah compatibility",
+   desc:"HALAL status and declaration of animal source in product and healthcare services provided are in accordance to Syari'ah or Islamic values with certification from Jabatan Kemajuan Islam Malaysia (JAKIM) or other JAKIM-authorised bodies.",
    perfLevels:[
      {num:"1",text:"Contains animal source, but no HALAL certificate."},
      {num:"2",text:"Contains animal source, with HALAL certificate presented."},
@@ -652,7 +733,7 @@ const CRITERIA = [
      {num:"2",text:"Meets ideal delivery requirement."}
    ]},
   {cat:"Service", name:"Supply description (perihal bekalan)",
-   desc:"The estimated quantity of tablets/capsules required for 2 years.",
+   desc:"The estimated quantity required for 2 years.",
    perfLevels:[
      {num:"0",text:"The total quantity offered is less than the total quantity ordered."},
      {num:"1",text:"The total quantity offered exceeds the total quantity ordered."},
@@ -662,7 +743,7 @@ const CRITERIA = [
    desc:"Past performance of manufacturer in fulfilling contractual obligations on time and in full.",
    perfLevels:[
      {num:"1",text:"Newly registered product or with a history of significant supply disruptions or recalls."},
-     {num:"2",text:"Consistent supply with minor delivery issues over the past 1–3 years."},
+     {num:"2",text:"Consistent supply but with occasional minor delivery issues over the past 1–3 years."},
      {num:"3",text:"No stock-out issues reported in the past 5 years."}
    ]},
   {cat:"Manufacturer", name:"Manufacturer's local investment",
@@ -673,18 +754,11 @@ const CRITERIA = [
      {num:"3",text:"Fully locally manufactured product."}
    ]},
   {cat:"Manufacturer", name:"Manufacturer's history and sustainability of company",
-   desc:"Assessment of the company's operational and financial stability to ensure long term sustainable healthcare partner.",
+   desc:"Assessment of the company's operational and financial stability to ensure long term sustainable healthcare partner by reviewing the audited financial statement from 2–3 years of audited accounts from bidder to check for consistent profit/loss trends and total net worth.",
    perfLevels:[
-     {num:"1",text:"Recently established company with evidence of financial volatility."},
-     {num:"2",text:"5 to 10 years in the industry with stable financial standing."},
-     {num:"3",text:"Over 10 years of market presence with ethical supply chain processes."}
-   ]},
-  {cat:"Service", name:"Service in contribution to national healthcare priorities",
-   desc:"Manufacturer's participation in supporting national health agendas such as the 'Generic First Policy' in order to achieve cost containment and universal health coverage.",
-   perfLevels:[
-     {num:"1",text:"Minimal alignment with national priorities."},
-     {num:"2",text:"Low alignment with standard therapeutic needs."},
-     {num:"3",text:"Significant contribution to essential medicine list."}
+     {num:"1",text:"Consecutive losses or negative equity."},
+     {num:"2",text:"2 out of 3 years profit."},
+     {num:"3",text:"3 consecutive years of profit with positive net worth."}
    ]},
   {cat:"Service", name:"Service in disease awareness and continued medical education",
    desc:"Non-promotional initiatives that improve public health literacy that aligns with the National Medicines Policy. Educational support by accredited organisations which may contribute to Continuing Professional Development (CPD) points to maintain and enhance professional knowledge, skills and performance of healthcare professionals.",
@@ -693,64 +767,32 @@ const CRITERIA = [
      {num:"2",text:"Basic product information and support upon request."},
      {num:"3",text:"Proactive opportunities by company to ensure engagement and educational support."}
    ]},
-  {cat:"Economic", name:"Economic impact in terms of efficacy, safety, real-life patient outcomes",
-   desc:"Cost saving reflected in Budget Impact Analysis by avoiding adverse drug reactions, clinical efficacy and real-life patient outcomes and direct cost of medicine.",
-   perfLevels:[
-     {num:"0",text:"Negative budget impact."},
-     {num:"1",text:"Neutral budget impact."},
-     {num:"2",text:"Positive budget impact."}
-   ]},
   {cat:"Economic", name:"Price Analysis",
-   desc:"Evaluation of the bid against the Jabatan Estimate (JE). Bids significantly lower (dumping) or higher than the JE are flagged.",
+   desc:"Evaluation of the bid against the Jabatan Estimate (JE). Bids significantly lower or higher than the JE are flagged.",
    perfLevels:[
      {num:"1",text:"Outside ideal range."},
      {num:"2",text:"Fair (−20% to +10% of JE)."},
      {num:"3",text:"Excellent (within ±5% of JE)."}
    ]},
-  {cat:"Economic", name:"Economic impact in terms of indirect costs",
-   desc:"The broader societal economic savings, such as reduced loss of productivity, decreased caregiver burden, and lower utilisation of non-medical resources.",
-   perfLevels:[
-     {num:"1",text:"High indirect cost such as prolonged recovery and frequent follow-up."},
-     {num:"2",text:"Standard impact on resources and productivity."},
-     {num:"3",text:"High value to patient and society with decreased care dependency."}
-   ]},
-  {cat:"Economic", name:"Financial Stability",
-   desc:"Analysis of Current Ratio (Current Assets / Current Liabilities) that is above 1. Bidders must prove they have enough cash flow to start the project without university advances.",
-   perfLevels:[
-     {num:"0",text:"Asset liability ratio < 1."},
-     {num:"1",text:"Asset liability ratio > 1."}
-   ]},
   {cat:"Economic", name:"Paid-Up Capital & MOF Registration",
-   desc:"Minimum paid-up capital must match the MOF Kod Bidang requirement for that tender value > RM500k.",
+   desc:"Minimum paid-up capital must match the MOF Kod Bidang requirement for that tender value.",
    perfLevels:[
-     {num:"0",text:"Does not meet minimum paid-up capital."},
+     {num:"0",text:"Does not meet minimum stipulated paid-up capital of the contracted value."},
      {num:"1",text:"Meets minimum paid-up capital."}
    ]},
-  {cat:"Economic", name:"Audited Financial Statements",
-   desc:"Review of the last 2–3 years of audited accounts to check for consistent profit/loss trends and total net worth.",
+  {cat:"Economic", name:"Bumiputera Margin of Preference (MOP)",
+   desc:"Price preference is given to qualified Bumiputera bidders depending on procurement value limit subject to Free Trade Agreement (FTA).",
    perfLevels:[
-     {num:"1",text:"Consecutive losses or negative equity."},
-     {num:"2",text:"2 out of 3 years profit."},
-     {num:"3",text:"3 consecutive years of profit with positive net worth."}
-   ]},
-  {cat:"Economic", name:"Bumiputera Preference Margin",
-   desc:"Price preference is given to Bumiputera firms (usually 2.5% to 10% depending on value). For tenders below RM500k, USM often restricts participation to Bumiputera-only (Dasar Perolehan Tempatan).",
-   perfLevels:[
-     {num:"0",text:"Non bumi, no adjustments applied."},
-     {num:"1",text:"Bumi with Price is \"adjusted\" downward by 2.5%–10% for comparison."}
+     {num:"0",text:"Non-Bumiputera with no adjustments applied."},
+     {num:"1",text:"Bumiputera sole importers eligible for tiered MOP (2.5% up to 20%)."},
+     {num:"2",text:"Bumiputera manufacturers eligible for maximum MOP (3% up to 10%)."}
    ]},
   {cat:"Economic", name:"Green Procurement Compliance",
    desc:"New for 2025/2026: Financial weightage is given to vendors with \"Green Label\" certifications, reducing long-term lifecycle costs.",
    perfLevels:[
      {num:"1",text:"No green compliance."},
      {num:"2",text:"Manufacturer has ISO 14001 but product is not certified."},
-     {num:"3",text:"MyHIJAU / Eco-label certified product."}
-   ]},
-  {cat:"Economic", name:"Credit Facility Verification",
-   desc:"Bidders must submit Borang CA (Bank Report) to prove the Line of Credit is at least 10% of the contract value.",
-   perfLevels:[
-     {num:"0",text:"Below 10%."},
-     {num:"1",text:"Letter of Credit / Bank Facility must be > 10%."}
+     {num:"3",text:"MyHIJAU/Eco-label certified product."}
    ]}
 ];
 
