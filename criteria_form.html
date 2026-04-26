@@ -630,7 +630,7 @@ function resetFont()      { applyFont(FONT_DEFAULT); }
 //  FORM VERSION
 // ─────────────────────────────────────────────────────────────
 const FORM_VERSION = '2.0';
-const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycby8ZD6ocg4H-mrxET5OL1lIq0y7U3Dp3KvvWCK-MlV4l8A0Hvn7R_FJhasvBcJZpkEO/exec';
+const BACKEND_URL  = 'https://script.google.com/macros/s/AKfycbyPgAEaYGujKmuPHEbVjEm8yDoLBoGffZcmr23REX5Jp4GbbJIcmBWGibhrbSfrC2M/exec';
 
 // ─────────────────────────────────────────────────────────────
 //  CASE DEFINITIONS
@@ -1616,12 +1616,13 @@ function buildCaseQ4(ci) {
     const suggestedPerfBox = (ci, key) => {
       const saved = (st.perfRefinements && st.perfRefinements[key]) || '';
       return `<div style="width:100%;padding:12px 14px;background:var(--bg)">
-        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Proposed performance levels</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">Proposed performance levels <span style="color:#a32d2d">*</span></div>
         <p style="font-size:12px;color:var(--text2);margin-bottom:8px">Describe the performance levels you would suggest for this criterion.</p>
-        <textarea id="q4ta-${ci}-${key}" rows="4"
+        <textarea id="q4sugg-${ci}-${key}" rows="4"
           placeholder="e.g. Level 1 — Minimum acceptable standard. Level 2 — Good practice. Level 3 — Optimal..."
           style="width:100%;background:var(--bg)"
           oninput="saveSuggestedPerfText('${ci}','${key}')">${saved}</textarea>
+        <div id="q4sugg-msg-${ci}-${key}" class="hidden" style="font-size:12px;color:#a32d2d;margin-top:4px">Please propose performance levels before proceeding.</div>
       </div>`;
     };
 
@@ -1715,13 +1716,21 @@ function saveQ4(ci) {
   const st = caseState[ci];
   if (!st.perfAnswers)     st.perfAnswers     = {};
   if (!st.perfRefinements) st.perfRefinements = {};
-  // Save all active MCDA criteria (st.selected = Q1B remain/merge + Q1A moved + custom)
+
   (st.selected || []).forEach(c => {
-    const key = `a_${c.name}`;
-    const val = document.querySelector(`input[name="q4ans-${ci}-${key}"]:checked`)?.value || '';
-    st.perfAnswers[key] = val;
-    const ta = document.getElementById(`q4ta-${ci}-${key}`);
-    if (ta) st.perfRefinements[key] = ta.value.trim();
+    if (c.movedFromMandatory || c.isCustom) {
+      // Suggested/moved criteria — stored under sugg_ key, no agree/suggest buttons
+      const key = `sugg_${c.name}`;
+      const ta = document.getElementById(`q4sugg-${ci}-${key}`);
+      if (ta) st.perfRefinements[key] = ta.value.trim();
+    } else {
+      // Standard MCDA criteria — agree/suggest with a_ key
+      const key = `a_${c.name}`;
+      const val = document.querySelector(`input[name="q4ans-${ci}-${key}"]:checked`)?.value || '';
+      st.perfAnswers[key] = val;
+      const ta = document.getElementById(`q4ta-${ci}-${key}`);
+      if (ta) st.perfRefinements[key] = ta.value.trim();
+    }
   });
 }
 
@@ -1882,9 +1891,37 @@ async function submitForm() {
   // ── Custom Mandatory criteria (Tab 6) ─────────────────────────
   const allCustomWajib = [];
   CASES.forEach((cas, ci) => {
-    (caseState[ci].customWajib || []).forEach(r => {
+    const st = caseState[ci];
+
+    // Type A — Suggested new mandatory (added via Q1A builder)
+    (st.customWajib || []).forEach(r => {
       if (!r.name || !r.name.trim()) return;
-      allCustomWajib.push({ case: cas.name, name: r.name||'', def: r.def||'' });
+      allCustomWajib.push({
+        case:       cas.name,
+        recordType: 'Suggested new',
+        name:       r.name || '',
+        def:        r.def  || '',
+        q1aReason:  '',
+        rank:       '',
+        perfLevels: ''
+      });
+    });
+
+    // Type B — Moved from mandatory to MCDA
+    WAJIB_CRITERIA.forEach(wc => {
+      const ch = (st.q1aChoices || {})[wc.name] || { action:'remain', reason:'' };
+      if (ch.action !== 'move_to_mcda') return;
+      const key      = `sugg_${wc.name}`;
+      const rankIdx  = (st.selected || []).findIndex(s => s.name === wc.name);
+      allCustomWajib.push({
+        case:       cas.name,
+        recordType: 'Moved to MCDA',
+        name:       wc.name,
+        def:        wc.desc || '',
+        q1aReason:  ch.reason || '',
+        rank:       rankIdx >= 0 ? rankIdx + 1 : '',
+        perfLevels: (st.perfRefinements || {})[key] || ''
+      });
     });
   });
   row.customWajib = allCustomWajib;
@@ -1892,14 +1929,20 @@ async function submitForm() {
     const st = caseState[ci];
     (st.customCriteria || []).forEach(r => {
       if (!r.name || !r.name.trim()) return;
-      const rankIdx = st.selected.findIndex(s => s.name === r.name);
+      const rankIdx  = st.selected.findIndex(s => s.name === r.name);
+      const q2Answer = (st.defAnswers     || {})[r.name] || '';
+      const q2Ref    = (st.defRefinements || {})[r.name] || '';
+      const suggKey  = `sugg_${r.name}`;
+      const perfLvl  = (st.perfRefinements || {})[suggKey] || r.perfLevels || '';
       allCustom.push({
-        case:       cas.name,
-        cls:        'MCDA',
-        name:       r.name       || '',
-        def:        r.def        || '',
-        perfLevels: r.perfLevels || '',
-        rank:       rankIdx >= 0 ? rankIdx + 1 : ''
+        case:        cas.name,
+        cls:         'MCDA',
+        name:        r.name || '',
+        def:         r.def  || '',
+        q2Answer:    q2Answer,
+        q2Refinement: q2Answer === 'amend' ? q2Ref : '',
+        rank:        rankIdx >= 0 ? rankIdx + 1 : '',
+        perfLevels:  perfLvl
       });
     });
   });
