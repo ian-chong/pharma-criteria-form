@@ -305,7 +305,7 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
       </div>
     </div>
     <div id="detailsValidationMsg" class="hidden" style="font-size:13px;color:#a32d2d;margin-bottom:8px;margin-top:12px">Please fill in all fields before proceeding.</div>
-    <div class="footer"><span></span><button class="btn btn-primary" onclick="nav('intro')">Start &#8594;</button></div>
+    <div class="footer"><span></span><button class="btn btn-primary" onclick="markFormStarted();nav('intro')">Start &#8594;</button></div>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -680,19 +680,40 @@ function collectDetailsFields() {
 
 function saveProgress() {
   try {
+    // Safely serialise caseState — strip any non-serialisable values
+    const safeState = caseState.map(function(st) {
+      return {
+        q1aChoices:        st.q1aChoices        || {},
+        q1aAmendment:      st.q1aAmendment      || '',
+        q1bChoices:        st.q1bChoices        || {},
+        customCriteria:    (st.customCriteria   || []).map(function(r){ return {cls:r.cls,name:r.name,def:r.def,perfLevels:r.perfLevels||''}; }),
+        customWajib:       (st.customWajib      || []).map(function(r){ return {name:r.name,def:r.def}; }),
+        defAnswers:        st.defAnswers         || {},
+        defRefinements:    st.defRefinements     || {},
+        selected:          (st.selected         || []).map(function(s){ return {cat:s.cat,name:s.name,desc:s.desc,isCustom:s.isCustom||false,movedFromMandatory:s.movedFromMandatory||false}; }),
+        perfAnswers:       st.perfAnswers        || {},
+        perfRefinements:   st.perfRefinements    || {},
+        preloadedFromCase1: st.preloadedFromCase1 || false
+      };
+    });
     const payload = {
       savedAt:   new Date().toISOString(),
       details:   collectDetailsFields(),
-      caseState: JSON.parse(JSON.stringify(caseState))
+      caseState: safeState
     };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
+    const serialised = JSON.stringify(payload);
+    localStorage.setItem(SAVE_KEY, serialised);
     // Show confirmation message
     const msg = document.getElementById('saveFloatMsg');
     if (msg) {
       msg.classList.add('show');
       setTimeout(function() { msg.classList.remove('show'); }, 2500);
     }
-  } catch(e) { console.warn('Save failed:', e); }
+    return true;
+  } catch(e) {
+    console.warn('Save failed:', e);
+    return false;
+  }
 }
 
 function clearSavedProgress() {
@@ -764,9 +785,9 @@ window.addEventListener('beforeunload', function(e) {
   e.returnValue = 'Please save your work before leaving — your progress has been saved to this browser and you can restore it when you return.';
 });
 
-// Check for saved session on load
-document.addEventListener('DOMContentLoaded', function() {
-  checkForSavedSession();
+// Check for saved session on load — use setTimeout to ensure DOM is ready
+window.addEventListener('load', function() {
+  setTimeout(checkForSavedSession, 100);
 });
 
 
