@@ -785,16 +785,10 @@ window.addEventListener('beforeunload', function(e) {
   e.returnValue = 'Please save your work before leaving — your progress has been saved to this browser and you can restore it when you return.';
 });
 
-// Check for saved session — retry until banner element exists
-function tryCheckSavedSession(attempts) {
-  const banner = document.getElementById('restoreBanner');
-  if (banner) {
-    checkForSavedSession();
-  } else if (attempts > 0) {
-    setTimeout(function() { tryCheckSavedSession(attempts - 1); }, 150);
-  }
+// Check for saved session — called after initial nav sets up the DOM
+function tryCheckSavedSession() {
+  checkForSavedSession();
 }
-window.addEventListener('load', function() { tryCheckSavedSession(10); });
 
 
 // ─────────────────────────────────────────────────────────────────
@@ -2206,6 +2200,7 @@ function resetForm() {
   caseState.forEach((st,i) => { caseState[i] = freshCaseState(); });
   window._lastSubmission = null;
   nav('details');
+tryCheckSavedSession();
 }
 
 // ─────────────────────────────────────────────────────────────
