@@ -706,8 +706,8 @@ function saveProgress() {
     // Show confirmation message
     const msg = document.getElementById('saveFloatMsg');
     if (msg) {
-      msg.classList.add('show');
-      setTimeout(function() { msg.classList.remove('show'); }, 2500);
+      msg.style.opacity = '1';
+      setTimeout(function() { msg.style.opacity = '0'; }, 2500);
     }
     return true;
   } catch(e) {
@@ -785,10 +785,16 @@ window.addEventListener('beforeunload', function(e) {
   e.returnValue = 'Please save your work before leaving — your progress has been saved to this browser and you can restore it when you return.';
 });
 
-// Check for saved session on load — use setTimeout to ensure DOM is ready
-window.addEventListener('load', function() {
-  setTimeout(checkForSavedSession, 100);
-});
+// Check for saved session — retry until banner element exists
+function tryCheckSavedSession(attempts) {
+  const banner = document.getElementById('restoreBanner');
+  if (banner) {
+    checkForSavedSession();
+  } else if (attempts > 0) {
+    setTimeout(function() { tryCheckSavedSession(attempts - 1); }, 150);
+  }
+}
+window.addEventListener('load', function() { tryCheckSavedSession(10); });
 
 
 // ─────────────────────────────────────────────────────────────────
