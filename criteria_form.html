@@ -1113,6 +1113,10 @@ function nav(stepId) {
   if (welcome) welcome.classList.toggle('hidden', stepId !== 'details');
   window.scrollTo({ top:0, behavior:'smooth' });
   if (typeof saveProgress === 'function' && _formStarted) saveProgress();
+  // Show restore banner when on details page
+  if (stepId === 'details' && typeof checkForSavedSession === 'function') {
+    checkForSavedSession();
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -2207,7 +2211,6 @@ function resetForm() {
   caseState.forEach((st,i) => { caseState[i] = freshCaseState(); });
   window._lastSubmission = null;
   nav('details');
-tryCheckSavedSession();
 }
 
 // ─────────────────────────────────────────────────────────────
