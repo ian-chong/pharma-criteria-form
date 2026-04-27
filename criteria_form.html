@@ -41,6 +41,46 @@
 body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg2); color:var(--text); font-size:15px; line-height:1.65; min-height:100vh; -webkit-font-smoothing:antialiased; }
 .page { max-width:900px; margin:0 auto; padding:2rem 1.25rem 4rem; }
 
+
+/* ── Save progress ── */
+.save-float {
+  position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
+  z-index:9998; display:flex; flex-direction:column; align-items:center; gap:8px;
+  pointer-events:none;
+}
+.save-float-btn {
+  pointer-events:all;
+  padding:14px 36px; font-size:16px; font-weight:700;
+  background:var(--usm-purple); color:#fff;
+  border:none; border-radius:40px; cursor:pointer;
+  box-shadow:0 6px 24px rgba(47,1,93,.35);
+  transition:transform .15s, box-shadow .15s;
+  font-family:inherit; letter-spacing:.01em;
+}
+.save-float-btn:hover { transform:scale(1.04); box-shadow:0 8px 30px rgba(47,1,93,.45); }
+.save-float-btn:active { transform:scale(.98); }
+.save-float-msg {
+  pointer-events:none;
+  font-size:13px; color:#fff; background:rgba(47,1,93,.82);
+  padding:6px 16px; border-radius:20px;
+  opacity:0; transition:opacity .4s;
+}
+.save-float-msg.show { opacity:1; }
+.restore-banner {
+  background:var(--usm-purple); color:#fff;
+  padding:14px 20px; border-radius:var(--radius);
+  margin-bottom:1.25rem; font-size:14px; line-height:1.6;
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.restore-banner strong { font-weight:700; }
+.restore-banner-btns { display:flex; gap:8px; flex-shrink:0; }
+.restore-banner-btns button {
+  padding:7px 16px; border-radius:var(--radius); font-size:13px;
+  font-weight:600; cursor:pointer; font-family:inherit; border:none;
+}
+.restore-btn-yes { background:#fff; color:var(--usm-purple); }
+.restore-btn-no  { background:rgba(255,255,255,.2); color:#fff; }
+
 /* ── Accessibility font widget ── */
 .a11y-widget {
   position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999;
@@ -574,6 +614,25 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
 
 <div style="text-align:center;padding:18px 24px;font-size:12px;color:var(--text2);border-top:0.5px solid var(--border);background:var(--bg2);margin-top:2rem">
   For any clarification or help, contact researcher Vanessa at <a href="tel:0178460984" style="color:var(--usm-purple);font-weight:600;text-decoration:none">017&nbsp;846&nbsp;0984</a>
+  <!-- restoreBanner placeholder — moved to details card -->
+  <div id="restoreBannerPlaceholder" class="hidden">
+    <div>
+      <strong>You have a saved session</strong> from <span id="restoreTime"></span>.<br>
+      Would you like to continue where you left off?
+    </div>
+    <div class="restore-banner-btns">
+      <button class="restore-btn-yes" onclick="restoreProgress()">Restore my progress</button>
+      <button class="restore-btn-no"  onclick="dismissRestore()">Start fresh</button>
+    </div>
+  </div>
+
+  <!-- ── Floating save button ── -->
+  <div class="save-float" id="saveFloat">
+    <div class="save-float-msg" id="saveFloatMsg">Progress saved to this browser ✓</div>
+    <button class="save-float-btn" onclick="saveProgress()">💾 Save progress</button>
+  </div>
+
+
   <!-- ── Accessibility font size widget ── -->
   <div class="a11y-widget" role="group" aria-label="Font size controls">
     <span class="a11y-label">A</span>
@@ -915,6 +974,7 @@ function nav(stepId) {
   const welcome = document.getElementById('header-welcome');
   if (welcome) welcome.classList.toggle('hidden', stepId !== 'details');
   window.scrollTo({ top:0, behavior:'smooth' });
+  if (typeof saveProgress === 'function') saveProgress();
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1968,6 +2028,7 @@ async function submitForm() {
     }
   } catch(err) { console.warn('Backend error:', err); }
 
+  markSubmitted();
   nav('done');
   document.getElementById('successMsg').textContent =
     `Thank you, ${row.name}. Your responses across all ${CASES.length} procurement cases have been recorded.`;
