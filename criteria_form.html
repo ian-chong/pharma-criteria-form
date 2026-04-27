@@ -661,6 +661,116 @@ input[type=checkbox] { width:16px; height:16px; accent-color:var(--usm-purple); 
 <script>
 
 // ─────────────────────────────────────────────────────────────────
+//  SAVE & RESTORE PROGRESS — localStorage
+// ─────────────────────────────────────────────────────────────────
+
+const SAVE_KEY = 'delphi_r1_progress';
+let _formStarted = false;
+
+function collectDetailsFields() {
+  return {
+    partName:      document.getElementById('partName')?.value       || '',
+    partRole:      document.getElementById('partRole')?.value       || '',
+    partDept:      document.getElementById('partDept')?.value       || '',
+    partDeptOther: document.getElementById('partDeptOther')?.value  || '',
+    partExp:       document.getElementById('partExp')?.value        || '',
+    partTenderExp: document.querySelector('input[name="partTenderExp"]:checked')?.value || ''
+  };
+}
+
+function saveProgress() {
+  try {
+    const payload = {
+      savedAt:   new Date().toISOString(),
+      details:   collectDetailsFields(),
+      caseState: JSON.parse(JSON.stringify(caseState))
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
+    // Show confirmation message
+    const msg = document.getElementById('saveFloatMsg');
+    if (msg) {
+      msg.classList.add('show');
+      setTimeout(function() { msg.classList.remove('show'); }, 2500);
+    }
+  } catch(e) { console.warn('Save failed:', e); }
+}
+
+function clearSavedProgress() {
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+}
+
+function restoreProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    const d = data.details || {};
+    if (d.partName)      { const el = document.getElementById('partName');      if (el) el.value = d.partName; }
+    if (d.partRole)      { const el = document.getElementById('partRole');      if (el) el.value = d.partRole; }
+    if (d.partDept)      { const el = document.getElementById('partDept');      if (el) { el.value = d.partDept; toggleOtherInst(); } }
+    if (d.partDeptOther) { const el = document.getElementById('partDeptOther'); if (el) el.value = d.partDeptOther; }
+    if (d.partExp)       { const el = document.getElementById('partExp');       if (el) el.value = d.partExp; }
+    if (d.partTenderExp) {
+      const radio = document.querySelector('input[name="partTenderExp"][value="' + d.partTenderExp + '"]');
+      if (radio) radio.checked = true;
+    }
+    if (data.caseState) {
+      data.caseState.forEach(function(st, i) { caseState[i] = st; });
+    }
+    dismissRestore();
+    _formStarted = true;
+  } catch(e) { console.warn('Restore failed:', e); dismissRestore(); }
+}
+
+function dismissRestore() {
+  const banner = document.getElementById('restoreBanner');
+  if (banner) banner.classList.add('hidden');
+}
+
+function checkForSavedSession() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data.savedAt) return;
+    const saved = new Date(data.savedAt);
+    const timeStr = saved.toLocaleDateString('en-MY', { day:'2-digit', month:'short' }) +
+                    ' at ' + saved.toLocaleTimeString('en-MY', { hour:'2-digit', minute:'2-digit' });
+    const timeEl = document.getElementById('restoreTime');
+    if (timeEl) timeEl.textContent = timeStr;
+    const banner = document.getElementById('restoreBanner');
+    if (banner) banner.classList.remove('hidden');
+  } catch(e) {}
+}
+
+function markSubmitted() {
+  _formStarted = false;
+  clearSavedProgress();
+}
+
+function markFormStarted() {
+  _formStarted = true;
+}
+
+function autoSave() {
+  // no-op — saving handled by nav() and save button
+}
+
+// beforeunload warning
+window.addEventListener('beforeunload', function(e) {
+  if (!_formStarted) return;
+  try { saveProgress(); } catch(err) {}
+  e.preventDefault();
+  e.returnValue = 'Please save your work before leaving — your progress has been saved to this browser and you can restore it when you return.';
+});
+
+// Check for saved session on load
+document.addEventListener('DOMContentLoaded', function() {
+  checkForSavedSession();
+});
+
+
+// ─────────────────────────────────────────────────────────────────
 //  ACCESSIBILITY — Font size control
 // ─────────────────────────────────────────────────────────────────
 const FONT_STEPS  = [0.85, 0.9, 0.95, 1, 1.1, 1.2, 1.35, 1.5];
