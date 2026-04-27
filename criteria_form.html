@@ -1111,7 +1111,7 @@ function nav(stepId) {
   const welcome = document.getElementById('header-welcome');
   if (welcome) welcome.classList.toggle('hidden', stepId !== 'details');
   window.scrollTo({ top:0, behavior:'smooth' });
-  if (typeof saveProgress === 'function') saveProgress();
+  if (typeof saveProgress === 'function' && _formStarted) saveProgress();
 }
 
 // ─────────────────────────────────────────────────────────────
