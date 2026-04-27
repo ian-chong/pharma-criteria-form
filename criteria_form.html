@@ -688,6 +688,10 @@ function collectDetailsFields() {
 function saveProgress() {
   try {
     // Safely serialise caseState — strip any non-serialisable values
+    // Save decision problem state
+    const dpAnswer   = document.querySelector('input[name=dpAnswer]:checked')?.value || 'agree';
+    const dpAmendment = document.getElementById('dpAmendment')?.value || '';
+
     const safeState = caseState.map(function(st) {
       return {
         q1aChoices:        st.q1aChoices        || {},
@@ -704,9 +708,11 @@ function saveProgress() {
       };
     });
     const payload = {
-      savedAt:   new Date().toISOString(),
-      details:   collectDetailsFields(),
-      caseState: safeState
+      savedAt:    new Date().toISOString(),
+      details:    collectDetailsFields(),
+      dpAnswer:   dpAnswer,
+      dpAmendment: dpAmendment,
+      caseState:  safeState
     };
     const serialised = JSON.stringify(payload);
     localStorage.setItem(SAVE_KEY, serialised);
@@ -744,6 +750,15 @@ function restoreProgress() {
     }
     if (data.caseState) {
       data.caseState.forEach(function(st, i) { caseState[i] = st; });
+    }
+    // Restore decision problem
+    if (data.dpAnswer) {
+      const radio = document.querySelector('input[name=dpAnswer][value="' + data.dpAnswer + '"]');
+      if (radio) { radio.checked = true; toggleDPField(); }
+    }
+    if (data.dpAmendment) {
+      const ta = document.getElementById('dpAmendment');
+      if (ta) ta.value = data.dpAmendment;
     }
     dismissRestore();
     _formStarted = true;
